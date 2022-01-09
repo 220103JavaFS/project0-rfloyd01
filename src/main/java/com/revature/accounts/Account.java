@@ -8,9 +8,20 @@ public abstract class Account {
     //sense to me to link accounts to users on the user side. The case of joint accounts
     //which can have multiple users will be handled separately.
 
-    double interestRate;
+    //all types of the same account should have the same interest rate, but accounts of different types will have
+    //different interest rates.
+    public static double interestRate;
+    public String accountType;
+    private double accountValue;
 
     public Account() {
         super();
+    }
+    public double getAccountValue () {
+        return accountValue;
+    }
+
+    public void addFunds(double funds) {
+        accountValue += funds;
     }
 }

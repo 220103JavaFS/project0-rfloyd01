@@ -4,8 +4,6 @@ import com.revature.users.User;
 
 public class CheckingAccount extends Account {
 
-    User accountOwner;
-
     public CheckingAccount()
     {
         super();

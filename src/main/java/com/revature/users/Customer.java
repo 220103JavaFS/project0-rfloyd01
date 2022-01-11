@@ -78,4 +78,5 @@ public class Customer extends User {
         if (amount > 0) activeAccounts.get(accountIndex).addFunds(amount);
         else System.out.println("Invalid amount, funds not added to account.");
     }
+
 }

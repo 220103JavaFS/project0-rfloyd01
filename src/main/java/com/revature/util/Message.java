@@ -12,6 +12,7 @@ public class Message {
     public String messageBody;
 
     public Message (String t, String mb, User f) {
+        //User is an abstract class, when calling this function a non-abstract user must be created and upcast into this role
         title = t;
         messageBody = mb;
         from = f.lastName+", "+f.firstName;

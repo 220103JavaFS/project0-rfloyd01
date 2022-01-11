@@ -1,7 +1,8 @@
 package com.revature;
 
 public class Hello {
-    public static void main(String[] args) {
-        System.out.println("Hello Project!!");
+    int yo;
+    public void yeet() {
+        System.out.println("yeeettyyy");
     }
 }

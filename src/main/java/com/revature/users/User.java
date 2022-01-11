@@ -100,6 +100,12 @@ public abstract class User {
         System.out.println(m.messageBody);
     }
 
+    public void receiveMessage(Message m) {
+        this.inbox.add(m);
+    }
+
+    public void
+
     void setPassword(String p) {
         password = p;
     }

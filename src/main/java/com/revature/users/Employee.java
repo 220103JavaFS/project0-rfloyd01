@@ -1,7 +1,12 @@
 package com.revature.users;
 
+import com.revature.accounts.Account;
+import com.revature.accounts.AccountFactory;
+import com.revature.util.Message;
+
 import java.util.ArrayList;
 import java.util.Queue;
+import java.util.Scanner;
 
 public class Employee {
 
@@ -24,10 +29,45 @@ public class Employee {
             return;
         }
 
+        NewAccountRequest currentRequest = new NewAccountRequest();
         //The account request log is a queue so each request must be processed in the order that it
         //comes in, no jumping around to easier requests!
         while (newAccountRequests.size() > 0) {
+            currentRequest = newAccountRequests.remove(); //remove request from the front of the stack
+            System.out.println("Customer name: " + currentRequest.customer.lastName + ", " + currentRequest.customer.firstName);
+            System.out.println("Account type: " + currentRequest.accountType);
 
+            Scanner scan = new Scanner(System.in); //create a scanner to look at employee input
+            String answer = "";
+            boolean cont = true; //used to break out of below loop when ready
+
+            while (true) {
+                System.out.println("Type 'Yes' into the console to approve the request, 'No' to deny the request, or" +
+                        "type 'into' to see more information on the customer");
+                answer = scan.nextLine();
+                switch (answer) {
+                    case ("Yes"):
+                        createAccount(currentRequest.customer, currentRequest.accountType);
+
+                        //Send a message to the customer letting them know if the new account creation
+                        //TODO: I need to upcast the employee into a User in order to send the message but Java isn't liking that
+                        //TODO: presumably because User is abstract and can't exist. Do I need to rethink the Message constructor
+                        //TODO: or is there a way to do this?
+
+                        Message message = new Message("New account opened", "A new " + currentRequest.accountType + " account" +
+                                "has been opened for you.", (User)this);
+                }
+            }
         }
+    }
+
+    private void createAccount (Customer c, String accountType) {
+        //invoke the Account Factory to create a new account and connect it to the appropriate customer
+        AccountFactory factory = AccountFactory.getFactory();
+        factory.addAccount(c, accountType);
+    }
+
+    public void sendMessage (User u, Message m) {
+
     }
 }

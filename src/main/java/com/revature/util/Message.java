@@ -1,6 +1,6 @@
 package com.revature.util;
 
-import com.revature.users.User;
+import com.revature.models.users.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

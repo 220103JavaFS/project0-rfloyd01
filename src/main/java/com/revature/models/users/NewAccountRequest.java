@@ -1,4 +1,4 @@
-package com.revature.users;
+package com.revature.models.users;
 
 public class NewAccountRequest {
     Customer customer;

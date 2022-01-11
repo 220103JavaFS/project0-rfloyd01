@@ -1,20 +1,27 @@
-package com.revature.users;
+package com.revature.models.users;
 
-import com.revature.accounts.Account;
-import com.revature.accounts.AccountFactory;
+import com.revature.models.accounts.AccountFactory;
 import com.revature.util.Message;
 
 import java.util.ArrayList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class Employee {
+public class Employee extends User {
 
     private ArrayList<Customer> assignedCustomers; //each employee will be responsible for a set amount of customers
     private Queue<NewAccountRequest> newAccountRequests; //a list of account requests needing approval, first come first served
 
     void addCustomer(Customer cust) {
         assignedCustomers.add(cust);
+    }
+
+    public Employee() {
+        super();
+    }
+
+    public Employee(String firstName, String lastName) {
+        super(firstName, lastName);
     }
 
     public void addAccountRequest(NewAccountRequest req) {
@@ -54,8 +61,8 @@ public class Employee {
                         //TODO: presumably because User is abstract and can't exist. Do I need to rethink the Message constructor
                         //TODO: or is there a way to do this?
 
-                        Message message = new Message("New account opened", "A new " + currentRequest.accountType + " account" +
-                                "has been opened for you.", (User)this);
+//                        Message message = new Message("New account opened", "A new " + currentRequest.accountType + " account" +
+//                                "has been opened for you.", (User)this);
                 }
             }
         }

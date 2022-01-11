@@ -1,4 +1,4 @@
-package com.revature.accounts;
+package com.revature.models.accounts;
 
 public abstract class Account {
 

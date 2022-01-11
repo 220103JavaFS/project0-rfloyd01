@@ -1,6 +1,6 @@
-package com.revature.accounts;
+package com.revature.models.accounts;
 
-import com.revature.users.Customer;
+import com.revature.models.users.Customer;
 
 public class AccountFactory {
 

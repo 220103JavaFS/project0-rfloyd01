@@ -1,6 +1,4 @@
-package com.revature.accounts;
-
-import com.revature.users.User;
+package com.revature.models.accounts;
 
 public class CheckingAccount extends Account {
 

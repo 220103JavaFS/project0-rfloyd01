@@ -1,9 +1,8 @@
-package com.revature.users;
+package com.revature.models.users;
 
-import com.revature.accounts.Account;
-import com.revature.util.Message;
+import com.revature.models.accounts.Account;
+
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Customer extends User {
 

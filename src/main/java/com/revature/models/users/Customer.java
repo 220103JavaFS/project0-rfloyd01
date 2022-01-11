@@ -8,7 +8,7 @@ public class Customer extends User {
 
     //TODO - currently each customer has a reference variable pointing to their employee, but each employee also has
     //TODO - reference variables pointing to their customers. Is it good form to have two objects pointing at eachother?
-    private Employee assignedEmployee; //every user will have an employee at the bank responsible for their accounts
+    private Employee assignedEmployee; //every user will have an employee at the bank responsible for their accounts, this will be assigned or reassigned by an admin
     private ArrayList<Account> activeAccounts; //a list of active accounts for the user
 
     //Customer specific information
@@ -21,23 +21,33 @@ public class Customer extends User {
         super();
     }
 
-    public Customer(String firstName, String lastName, ArrayList<Employee> employees) {
-        super(firstName, lastName); //first, call the default User constructor which handles name, username and password
+    public Customer(String firstName, String lastName, String username, String password) {
+        super(firstName, lastName, username);
 
-        //There need to be some existing employees at the bank before customers can start making accounts.
-        //The list of employees is passed to the Customer constructor so that a customer can be assigned
-        //to a random employee who will handle their accounts. A User factory will make sure that employees
-        // actually exist before allowing customers to be created
-        int employeeNumber = (int)(Math.random() * employees.size());
-        this.assignedEmployee = employees.get(employeeNumber);
+        //need to encrypt the password before storing it
+        encryptPassword(password);
+        this.password = password;
     }
 
-    public Customer(String firstName, String lastName, ArrayList<Employee> employees, String accountType, double startingAmount) {
-        //a user can choose to open an account with the bank when creating their profile, although, they don't have to
-        this(firstName, lastName, employees); //constructor chaining with non-account creation constructor
+    @Override
+    protected String encryptPassword(String password) {
+        String encryptedPassword = ""; //TODO: potentially use a stringBuilder here to avoid creating too many literals
+        for (char c:password.toCharArray()) {
+            //add a value of 10 to each character in the password string to encrypt it. This high tech method of
+            //encryption is said to be "un-hackable"
+            encryptedPassword += (c + 10);
+        }
+        return encryptedPassword;
+    }
 
-        //a customer can't directly open an account, they apply to have one opened and the employee opens it for them
-        applyForAccount(accountType);
+    @Override
+    protected String getPassword() {
+        String decryptedPassword = ""; //TODO: potentially use a stringBuilder here to avoid creating too many literals
+        for (char c:this.password.toCharArray()) {
+            //subtract a value of 10 from each character to undo the initial encryption
+            decryptedPassword += (c - 10);
+        }
+        return decryptedPassword;
     }
 
     //Public Functions

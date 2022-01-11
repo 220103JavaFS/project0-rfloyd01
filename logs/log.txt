@@ -1,3 +1,16 @@
-13:45:09.059 [] [Thread-0] INFO  io.javalin.Javalin - It looks like you created a Javalin instance, but you never started it.
-13:45:09.061 [] [Thread-0] INFO  io.javalin.Javalin - Try: Javalin app = Javalin.create().start();
-13:45:09.062 [] [Thread-0] INFO  io.javalin.Javalin - For more help, visit https://javalin.io/documentation#starting-and-stopping
+17:02:04.135 [] [main] INFO  io.javalin.Javalin - 
+       __                      __ _            __ __
+      / /____ _ _   __ ____ _ / /(_)____      / // /
+ __  / // __ `/| | / // __ `// // // __ \    / // /_
+/ /_/ // /_/ / | |/ // /_/ // // // / / /   /__  __/
+\____/ \__,_/  |___/ \__,_//_//_//_/ /_/      /_/
+
+          https://javalin.io/documentation
+
+17:02:04.141 [] [main] DEBUG org.eclipse.jetty.util.log - Logging to Logger[org.eclipse.jetty.util.log] via org.eclipse.jetty.util.log.Slf4jLog
+17:02:04.144 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @319ms to org.eclipse.jetty.util.log.Slf4jLog
+17:02:04.145 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+17:02:04.160 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 93 days old. Consider upgrading!).
+17:02:04.160 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+17:02:04.417 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+17:02:04.417 [] [main] INFO  io.javalin.Javalin - Javalin started in 273ms \o/

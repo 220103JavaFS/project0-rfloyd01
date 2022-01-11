@@ -21,33 +21,42 @@ public class Customer extends User {
         super();
     }
 
-    public Customer(String firstName, String lastName, String username, String password) {
-        super(firstName, lastName, username);
+    public Customer(String userType, String firstName, String lastName, String username, String password) {
+        super(userType, firstName, lastName, username);
 
         //need to encrypt the password before storing it
-        encryptPassword(password);
-        this.password = password;
+        this.password = encryptPassword(password);
     }
 
     @Override
     protected String encryptPassword(String password) {
-        String encryptedPassword = ""; //TODO: potentially use a stringBuilder here to avoid creating too many literals
-        for (char c:password.toCharArray()) {
+        StringBuilder encryptedPassword = new StringBuilder(password); //use string builder to build one char at a time
+        char newChar;
+
+        for (int i = 0; i < encryptedPassword.length(); i++) {
             //add a value of 10 to each character in the password string to encrypt it. This high tech method of
             //encryption is said to be "un-hackable"
-            encryptedPassword += (c + 10);
+            newChar = encryptedPassword.charAt(i);
+            newChar += 10;
+            encryptedPassword.setCharAt(i, newChar);
         }
-        return encryptedPassword;
+        log.info("Encrypted password for Customer: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
+        return encryptedPassword.toString();
     }
 
     @Override
     protected String getPassword() {
-        String decryptedPassword = ""; //TODO: potentially use a stringBuilder here to avoid creating too many literals
-        for (char c:this.password.toCharArray()) {
-            //subtract a value of 10 from each character to undo the initial encryption
-            decryptedPassword += (c - 10);
+        StringBuilder decryptedPassword = new StringBuilder(this.password); //use string builder to build one char at a time
+        char newChar;
+
+        for (int i = 0; i < decryptedPassword.length(); i++) {
+            //remove 10 from each character in the password to decrypt it
+            newChar = decryptedPassword.charAt(i);
+            newChar -= 10;
+            decryptedPassword.setCharAt(i, newChar);
         }
-        return decryptedPassword;
+        log.info("Actual password for Customer: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
+        return decryptedPassword.toString();
     }
 
     //Public Functions

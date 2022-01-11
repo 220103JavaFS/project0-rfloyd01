@@ -1,7 +1,10 @@
 package com.revature.models.users;
 
+import com.revature.dao.UserDAO;
 import com.revature.models.accounts.AccountFactory;
 import com.revature.util.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Queue;
@@ -20,33 +23,42 @@ public class Employee extends User {
         super();
     }
 
-    public Employee(String firstName, String lastName, String username, String password) {
-        super(firstName, lastName, username);
+    public Employee(String userType, String firstName, String lastName, String username, String password) {
+        super(userType, firstName, lastName, username);
 
         //need to encrypt the password before storing it
-        encryptPassword(password);
-        this.password = password;
+        this.password = encryptPassword(password);
     }
 
     @Override
     protected String encryptPassword(String password) {
-        String encryptedPassword = ""; //TODO: potentially use a stringBuilder here to avoid creating too many literals
-        for (char c:password.toCharArray()) {
+        StringBuilder encryptedPassword = new StringBuilder(password); //use string builder to build one char at a time
+        char newChar;
+
+        for (int i = 0; i < encryptedPassword.length(); i++) {
             //add a value of 25 to each character in the password string to encrypt it. This high tech method of
             //encryption is said to be "un-hackable"
-            encryptedPassword += (c + 25);
+            newChar = encryptedPassword.charAt(i);
+            newChar += 25;
+            encryptedPassword.setCharAt(i, newChar);
         }
-        return encryptedPassword;
+        log.info("Encrypted password for Employee: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
+        return encryptedPassword.toString();
     }
 
     @Override
     protected String getPassword() {
-        String decryptedPassword = ""; //TODO: potentially use a stringBuilder here to avoid creating too many literals
-        for (char c:this.password.toCharArray()) {
-            //subtract a value of 25 from each character to undo the initial encryption
-            decryptedPassword += (c - 25);
+        StringBuilder decryptedPassword = new StringBuilder(this.password); //use string builder to build one char at a time
+        char newChar;
+
+        for (int i = 0; i < decryptedPassword.length(); i++) {
+            //remove 25 from each character in the password to decrypt it
+            newChar = decryptedPassword.charAt(i);
+            newChar -= 25;
+            decryptedPassword.setCharAt(i, newChar);
         }
-        return decryptedPassword;
+        log.info("Actual password for Employee: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
+        return decryptedPassword.toString();
     }
 
     public void addAccountRequest(NewAccountRequest req) {

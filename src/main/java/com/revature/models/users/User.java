@@ -4,14 +4,18 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.revature.util.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class User {
 
     //information fields for the user
+    public String userType;
     public String firstName;
     public String lastName;
     public String username;
-    protected String password; //this will need some form of encryption
+    public String password; //it's ok to have this as public because the passwords are encrypted
+    protected static Logger log = LoggerFactory.getLogger(User.class); //create a separate logger for all users
     private ArrayList<Message> inbox; //every user has an inbox which can hold messages that only they can access
 
     //Constructors
@@ -19,8 +23,8 @@ public abstract class User {
         //the default constructor
         super();
     }
-    public User (String firstName, String lastName, String username) {
-
+    public User (String userType, String firstName, String lastName, String username) {
+        this.userType = userType;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;

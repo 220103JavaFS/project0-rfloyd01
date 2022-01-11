@@ -14,9 +14,9 @@ public class UserFactory {
 
     public User makeUser(UserRequest u) {
         //String firstName, String lastName, String username, String password
-        if (u.userType == "Customer") return new Customer(u.firstName, u.lastName, u.username, u.password);
-        else if (u.userType == "Employee") return new Employee(u.firstName, u.lastName, u.username, u.password);
-        else return new Admin(u.firstName, u.lastName, u.username, u.password);
+        if (u.userType == "Customer") return new Customer(u.userType, u.firstName, u.lastName, u.username, u.password);
+        else if (u.userType == "Employee") return new Employee(u.userType,u.firstName, u.lastName, u.username, u.password);
+        else return new Admin(u.userType,u.firstName, u.lastName, u.username, u.password);
     }
 
     public static UserFactory getFactory() {

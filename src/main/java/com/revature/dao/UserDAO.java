@@ -1,9 +1,6 @@
 package com.revature.dao;
 
-import com.revature.models.users.Employee;
-import com.revature.models.users.User;
-import com.revature.models.users.UserFactory;
-import com.revature.models.users.UserRequest;
+import com.revature.models.users.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +18,15 @@ public class UserDAO {
 
         users = new ArrayList<User>();
 
-        users.add(new Employee("Robert", "Floyd", "rfloyd01", "Apples2oranges!"));
-        users.add(new Employee("Jonathan", "Miller", "JJMM07", "123Ab!!powl"));
-        users.add(new Employee("Daniel", "Preuss", "DanThaMan", "CodingIsKewl420$"));
+        //first add an admin
+        users.add(new Admin("Admin", "Robert", "Floyd", "rfloyd01", "Apples2oranges!"));
+
+        //then add an employees
+        users.add(new Employee("Employee", "Scott", "Olsen", "Sno19", "Guitar_Man12"));
+
+        //finally add some customers
+        users.add(new Customer("Customer", "Jonathan", "Miller", "JJMM07", "123Ab!!powl"));
+        users.add(new Customer("Customer", "Daniel", "Preuss", "DanThaMan", "CodingIsKewl420$"));
     }
 
     public ArrayList<User> getAllUsers() {

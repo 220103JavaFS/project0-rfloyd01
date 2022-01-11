@@ -27,7 +27,16 @@ public class UserService {
         //First, we have to check if the desired userType is valid (ideally when creating a new user there would be
         //some kind of check box on the front end to make sure you only select a valid user, however, this app isn't
         //going to have a front end and is only passed a string so this check needs to happen)
-        if ((u.userType != "Customer" || u.userType != "Employee") || u.userType != "Admin") errorCode |= 0b1;
+        switch (u.userType) {
+            case "Customer":
+                break; //this is fine
+            case "Employee":
+                break; //this is fine
+            case "Admin":
+                break; //this is fine
+            default:
+                errorCode |= 0b1;
+        }
 
         //Second, we need to access the DAO layer and see if the desired username passed in through 'u' is available
         //(i.e. doesn't already exist in the database)
@@ -49,12 +58,11 @@ public class UserService {
         for (int i = 0; i < u.password.length(); i++) {
             char c = u.password.charAt(i);
 
-            //the binary exclusive or can be used to turn password bits from 0 to 1
-            if (c >= 'A' && c <= 'Z') errorCode ^= 0b1000; //uppercase criteria met
-            else if (c >= 'a' && c <= 'z') errorCode |= 0b10000; //lowercase criteria met
-            else if (c >= '0' && c <= '9') errorCode |= 0b100000; //number criteria met
-            else
-                errorCode |= 0b1000000; //special character criteria met TODO - may want to consider limiting which characters count here
+            //use the binary and operator to remove errors from error code if necessary
+            if (c >= 'A' && c <= 'Z') errorCode &= 0b1110111; //uppercase criteria met
+            else if (c >= 'a' && c <= 'z') errorCode &= 0b1101111; //lowercase criteria met
+            else if (c >= '0' && c <= '9') errorCode &= 0b1011111; //number criteria met
+            else errorCode &= 0b111111; //special character criteria met TODO - may want to consider limiting which characters count here
 
             if (errorCode == 0) {
                 //as soon as our errorCode has been reduced to 0 we are cleared to create a new user
@@ -65,6 +73,7 @@ public class UserService {
             }
         }
 
+        System.out.println("Error code is " + errorCode);
         //if we get to this point in the loop then something was wrong with the UserRequest, return the full error code
         //without creating a user
         return errorCode;

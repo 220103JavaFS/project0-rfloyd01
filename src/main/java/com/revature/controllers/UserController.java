@@ -34,25 +34,30 @@ public class UserController extends Controller {
         UserRequest u = ctx.bodyAsClass(UserRequest.class);
         int errorId = userService.newUser(u);
         if (errorId == 0) {
+            ctx.result("Successfully created new user.");
             ctx.status(201); //the user was succesfully created added to the database
         }
         else {
             //something went wrong, print the error message associated with the error code
             if (errorId == 0b10000000)
             {
-                log.warn("The user was succesfully created, however, an unknown error" +
+                ctx.result("The user was succesfully created, however, an unknown error" +
                         "occured when trying to add them to the database. Please try again later");
                 ctx.status(500); //server or database error
             }
             else {
                 //there can be multiple error bits so we need to check for each one in an if statement
-                if ((errorId & 1000000) > 0) {log.warn("Password didn't include a special character, please update password.");}
-                if ((errorId & 100000) > 0) {log.warn("Password didn't include a number, please update password.");}
-                if ((errorId & 10000) > 0) {log.warn("Password didn't include a lowercase letter, please update password.");}
-                if ((errorId & 1000) > 0) {log.warn("Password didn't include an uppercase letter, please update password.");}
-                if ((errorId & 100) > 0) {log.warn("Password wasn't at least 10 characters, please lengthen password.");}
-                if ((errorId & 10) > 0) {log.warn("Username is already taken, please use a different username.");}
-                if ((errorId & 1) > 0) {log.warn("Not a valid user type, please select a valid user type.");}
+
+                StringBuilder errorMessage = new StringBuilder();
+                if ((errorId & 0b1000000) > 0) {errorMessage.append("Password didn't include a special character, please update password.\n");}
+                if ((errorId & 0b100000) > 0) {errorMessage.append("Password didn't include a number, please update password.\n");}
+                if ((errorId & 0b10000) > 0) {errorMessage.append("Password didn't include a lowercase letter, please update password.\n");}
+                if ((errorId & 0b1000) > 0) {errorMessage.append("Password didn't include an uppercase letter, please update password.\n");}
+                if ((errorId & 0b100) > 0) {errorMessage.append("Password wasn't at least 10 characters, please lengthen password.\n");}
+                if ((errorId & 0b10) > 0) {errorMessage.append("Username is already taken, please use a different username.\n");}
+                if ((errorId & 0b1) > 0) {errorMessage.append("Not a valid user type, please select a valid user type.\n");}
+
+                ctx.result("Couldn't create new user:\n" + errorMessage); //add error message in the response
                 ctx.status(400); //request error
             }
         }
@@ -61,6 +66,6 @@ public class UserController extends Controller {
     @Override
     public void addRoutes(Javalin app) {
         app.get("/users", getAllUsers);
-        app.put("/users", createUser);
+        app.post("/users", createUser);
     }
 }

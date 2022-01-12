@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class Employee extends User {
 
-    private ArrayList<Customer> assignedCustomers; //each employee will be responsible for a set amount of customers
+    private ArrayList<Customer> assignedCustomers; //each employee will be responsible for a set amount of customers, this will be hanled by admins
     private Queue<NewAccountRequest> newAccountRequests; //a list of account requests needing approval, first come first served
 
     void addCustomer(Customer cust) {

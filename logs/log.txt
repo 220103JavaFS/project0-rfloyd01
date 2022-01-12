@@ -1,8 +1,8 @@
-18:31:19.147 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-18:31:19.150 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-18:31:19.150 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-18:31:19.150 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-18:31:19.191 [] [main] INFO  io.javalin.Javalin - 
+22:45:41.967 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
+22:45:41.974 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
+22:45:41.975 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
+22:45:41.976 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
+22:45:42.052 [] [main] INFO  io.javalin.Javalin - 
        __                      __ _            __ __
       / /____ _ _   __ ____ _ / /(_)____      / // /
  __  / // __ `/| | / // __ `// // // __ \    / // /_
@@ -11,10 +11,15 @@
 
           https://javalin.io/documentation
 
-18:31:19.198 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @319ms to org.eclipse.jetty.util.log.Slf4jLog
-18:31:19.199 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
-18:31:19.214 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 93 days old. Consider upgrading!).
-18:31:19.214 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
-18:31:19.470 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
-18:31:19.470 [] [main] INFO  io.javalin.Javalin - Javalin started in 271ms \o/
-18:31:24.547 [] [qtp770189387-37] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Xq?Dy~vus?:
+22:45:42.067 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @620ms to org.eclipse.jetty.util.log.Slf4jLog
+22:45:42.069 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+22:45:42.098 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 93 days old. Consider upgrading!).
+22:45:42.098 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+22:45:42.520 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+22:45:42.520 [] [main] INFO  io.javalin.Javalin - Javalin started in 452ms \o/
+22:46:05.464 [] [qtp175408781-36] INFO  c.r.controllers.UserController - Successfully logged out.
+22:47:36.958 [] [qtp175408781-24] INFO  c.r.controllers.UserController - Successfully logged out.
+22:47:52.827 [] [qtp175408781-36] INFO  com.revature.models.users.User - Encrypted password for Customer: Bobby Floyd is ?oo~W?Poo~<=40
+22:48:08.899 [] [qtp175408781-22] INFO  c.r.controllers.UserController - Successfully logged out.
+22:48:36.457 [] [qtp175408781-36] INFO  com.revature.models.users.User - Encrypted password for Customer: Bobby Floyd is ?oo~W?Poo~<=40
+22:48:39.335 [] [qtp175408781-22] INFO  c.r.controllers.UserController - Can't login because someone else is already logged in, log out before switching to a new user.

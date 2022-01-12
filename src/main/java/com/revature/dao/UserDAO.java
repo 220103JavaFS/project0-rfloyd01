@@ -41,7 +41,7 @@ public class UserDAO {
 
             UserFactory uf = UserFactory.getFactory();
             User newUser = uf.makeUser(u);
-            users.add(newUser); //TODO: ultimately this will need to go into the database
+            users.add(newUser); //TODO: ultimately this will need to go into the database and not an ArrayList
             return 0; //if add works then return 0 error code
         }
         catch (Exception e) {

@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.dao.UserDAO;
+import com.revature.models.users.Customer;
 import com.revature.models.users.User;
 import com.revature.models.users.UserRequest;
 import com.revature.services.UserService;
@@ -21,6 +22,16 @@ public class UserController extends Controller {
 
         ctx.json(list);
         ctx.status(200);
+
+        //Playing around with authorization header, I think this may be important for logging in
+        //I created a custom header in Postman named "Username" and set the default value to
+        //"nobody". Test to see if the below function will actually get this value from the header
+        String username = ctx.header("Username"); //the value stored in the Username header is saved into the username variable
+        log.info(username);
+
+        //The following function should change the name of the value stored in the header with the appropriate key
+        //currently I'm not sure if something in the response header will effect the orignal value in the request
+        //header though
     };
 
     //TODO: create a getAllEmployees Handler
@@ -63,9 +74,60 @@ public class UserController extends Controller {
         }
     };
 
+    private Handler login = (ctx) -> {
+        //I currently have a script in Postman that will set the Authentication header based on the username
+        //retrieved from this function. I'm currently not sure if there's a way to do this without a Postman
+        //script
+
+        //first check to see if there's already a user logged in, if so, prompt them to logout before logging
+        //in
+        String currentUser = ctx.header("username");
+        if (currentUser == "") {
+            //create a pretend user
+            Customer testCustomer = new Customer("Customer", "Bobby", "Floyd", "rfloyd01", "yeetMyFeet23*&");
+            ctx.json(testCustomer);
+            ctx.status(200);
+        }
+        else {
+            log.info("Can't login because someone else is already logged in, " +
+                    "log out before switching to a new user.");
+
+            //Postman is expecting to get a value here so just return the current value
+            ctx.json("{\"username\" : \"" + currentUser + "\"}");
+        }
+
+    };
+
+    private Handler logout = (ctx) -> {
+        //I currently have a script in Postman that will set the Authentication header based on the username
+        //retrieved from this function. I'm currently not sure if there's a way to do this without a Postman
+        //script
+
+        //first check to see if there's already a user logged in, if so, prompt them to logout before logging
+        //in
+        String currentUser = ctx.header("username");
+        if (currentUser == "") {
+            //create a pretend user
+            log.info("Can't logout because nobody is logged in.");
+
+            //Postman is expecting to get a value here so just return the current value
+            ctx.json("{\"username\" : \"" + currentUser + "\"}");
+        }
+        else {
+            ctx.json("{\"username\" : \"\"}");
+            ctx.status(200);
+            log.info("Successfully logged out.");
+        }
+
+    };
+
     @Override
     public void addRoutes(Javalin app) {
         app.get("/users", getAllUsers);
         app.post("/users", createUser);
+
+        //should probably create a separate login/logout controller
+        app.post("/login", login);
+        app.post("/logout", logout);
     }
 }

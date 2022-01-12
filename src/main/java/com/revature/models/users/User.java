@@ -1,9 +1,8 @@
 package com.revature.models.users;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import com.revature.util.Message;
+import com.revature.models.util.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

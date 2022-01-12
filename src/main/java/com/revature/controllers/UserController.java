@@ -10,28 +10,57 @@ import io.javalin.http.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserController extends Controller {
 
+    //The user controller is what controls things on the user page. Customers should not have access to this page,
+    //only Employees and Admins do. Employees view will be restricted so that they can only see their own clients
+    //while Admins will be able to see everybody in the database.
+
     private UserService userService = new UserService();
     private static Logger log = LoggerFactory.getLogger(UserController.class); //Do all classes get their own logger?
 
-    private Handler getAllUsers = (ctx) -> {
-        List<User> list = userService.getAllUsers();
+    private Handler getUsersMessage = (ctx) -> {
+        String resultString = "Welcome to the User View Page!\n" +
+                "To login using Postman please pass a command with the following syntax to 'POST - localhost\\8080\\login':\n" +
+                "{\n" +
+                "    \"username\" : \"{your_username_here}\",\n" +
+                "    \"password\" : \"{your_password_here}\"\n" +
+                "}\n\n" +
+                "Please note that all words must be encased in double quotation marks. Your actual username and password\n" +
+                "will replace the brackets and what's inside of them.";
+        ctx.result(resultString);
+        ctx.status(200);
+    };
 
-        ctx.json(list);
+    private Handler getUsers = (ctx) -> {
+
+        //First we need to take a look at the Authorization header of the incoming HTTP request to see if the user has
+        //access to this page, and if so, what users can they actually see?
+        String currentUser = ctx.header("username");
+
+        //Need to drill down to the service layer and then further down to the DAO layer to figure out the user type
+        String userType = userService.getUserTypeService(currentUser);
+        ArrayList<User> userList;
+        switch (userType) {
+            case "Employee":
+                userList = userService.getCustomers(currentUser);
+                break;
+            case "Admin":
+                userList = userService.getAllUsers();
+                break;
+            default:
+                ctx.result("You don't have access to this page.");
+                ctx.status(401);
+                return; //TODO: can you tell a handler function to return? it has no return type
+
+        }
+
+        ctx.json(userList);
         ctx.status(200);
 
-        //Playing around with authorization header, I think this may be important for logging in
-        //I created a custom header in Postman named "Username" and set the default value to
-        //"nobody". Test to see if the below function will actually get this value from the header
-        String username = ctx.header("Username"); //the value stored in the Username header is saved into the username variable
-        log.info(username);
-
-        //The following function should change the name of the value stored in the header with the appropriate key
-        //currently I'm not sure if something in the response header will effect the orignal value in the request
-        //header though
     };
 
     //TODO: create a getAllEmployees Handler
@@ -74,60 +103,22 @@ public class UserController extends Controller {
         }
     };
 
-    private Handler login = (ctx) -> {
-        //I currently have a script in Postman that will set the Authentication header based on the username
-        //retrieved from this function. I'm currently not sure if there's a way to do this without a Postman
-        //script
 
-        //first check to see if there's already a user logged in, if so, prompt them to logout before logging
-        //in
-        String currentUser = ctx.header("username");
-        if (currentUser == "") {
-            //create a pretend user
-            Customer testCustomer = new Customer("Customer", "Bobby", "Floyd", "rfloyd01", "yeetMyFeet23*&");
-            ctx.json(testCustomer);
-            ctx.status(200);
-        }
-        else {
-            log.info("Can't login because someone else is already logged in, " +
-                    "log out before switching to a new user.");
-
-            //Postman is expecting to get a value here so just return the current value
-            ctx.json("{\"username\" : \"" + currentUser + "\"}");
-        }
-
-    };
-
-    private Handler logout = (ctx) -> {
-        //I currently have a script in Postman that will set the Authentication header based on the username
-        //retrieved from this function. I'm currently not sure if there's a way to do this without a Postman
-        //script
-
-        //first check to see if there's already a user logged in, if so, prompt them to logout before logging
-        //in
-        String currentUser = ctx.header("username");
-        if (currentUser == "") {
-            //create a pretend user
-            log.info("Can't logout because nobody is logged in.");
-
-            //Postman is expecting to get a value here so just return the current value
-            ctx.json("{\"username\" : \"" + currentUser + "\"}");
-        }
-        else {
-            ctx.json("{\"username\" : \"\"}");
-            ctx.status(200);
-            log.info("Successfully logged out.");
-        }
-
-    };
 
     @Override
     public void addRoutes(Javalin app) {
-        app.get("/users", getAllUsers);
-        app.post("/users", createUser);
+        //User viewing
+        app.get("/users/view", getUsersMessage);
+        app.get("/users/view", getUsers);
 
-        //should probably create a separate login/logout controller
-        app.post("/login", login);
-        app.post("/logout", logout);
+        //User creation
+        app.get("/users/create", createUserMessage);
+        app.post("/users/create", createUser);
+
+        //TODO: Should logging in and out be it's own controller? I'm still a little confused about what exactly should
+        //  get a controller. In my mind, each model class (or group of model classes) would have a separate controller
+        //  that's capable of handling many different functions. Or maybe it's more like anything that would have a
+        //  separate endpoint (i.e. /users and /login) would need different controllers? Should ask Tim for clarification.
+
     }
 }

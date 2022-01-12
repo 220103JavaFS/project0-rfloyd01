@@ -29,6 +29,17 @@ public class UserDAO {
         users.add(new Customer("Customer", "Daniel", "Preuss", "DanThaMan", "CodingIsKewl420$"));
     }
 
+    public static String getUserTypeDAO(String currentUser) {
+        //Takes in the username passed to the function and queries the database to see if the user
+        //exists. If so, return the userType of that user (i.e. Customer, Employee, Admin). If the
+        //username isn't in the database return a blank string
+
+        //TODO: Function to query database will go here
+        //  for now just return a blank string.
+
+        return "";
+    }
+
     public ArrayList<User> getAllUsers() {
         return users;
     }

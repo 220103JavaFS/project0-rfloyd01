@@ -1,14 +1,9 @@
 package com.revature.models.users;
 
-import com.revature.dao.UserDAO;
-import com.revature.models.accounts.AccountFactory;
-import com.revature.util.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.revature.models.util.Message;
 
 import java.util.ArrayList;
 import java.util.Queue;
-import java.util.Scanner;
 
 public class Employee extends User {
 

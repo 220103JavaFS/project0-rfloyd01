@@ -83,4 +83,13 @@ public class UserService {
         //TODO: I currently don't have database functionality, return here after I do. For now just always return true
         return true;
     }
+
+    public String getUserTypeService(String currentUser) {
+        // a simple request to the DAO layer to return the userType for the given user.
+        //It checks to see that the username isn't blank before making the request of the DAO
+        //because usernames can't be blank.
+        if (currentUser == "") return "";
+        else return UserDAO.getUserTypeDAO(currentUser);
+    }
+
 }

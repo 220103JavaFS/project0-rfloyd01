@@ -46,7 +46,7 @@ public class UserController extends Controller {
         ArrayList<User> userList;
         switch (userType) {
             case "Employee":
-                userList = userService.getCustomers(currentUser);
+                //userList = userService.getCustomers(currentUser);
                 break;
             case "Admin":
                 userList = userService.getAllUsers();
@@ -58,7 +58,7 @@ public class UserController extends Controller {
 
         }
 
-        ctx.json(userList);
+        //ctx.json(userList);
         ctx.status(200);
 
     };
@@ -109,10 +109,10 @@ public class UserController extends Controller {
     public void addRoutes(Javalin app) {
         //User viewing
         app.get("/users/view", getUsersMessage);
-        app.get("/users/view", getUsers);
+        app.post("/users/view", getUsers);
 
         //User creation
-        app.get("/users/create", createUserMessage);
+        //app.get("/users/create", createUserMessage);
         app.post("/users/create", createUser);
 
         //TODO: Should logging in and out be it's own controller? I'm still a little confused about what exactly should

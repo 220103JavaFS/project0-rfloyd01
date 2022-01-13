@@ -45,6 +45,4 @@ public class Admin extends User {
         log.info("Actual password for Admin: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
         return decryptedPassword.toString();
     }
-
-
 }

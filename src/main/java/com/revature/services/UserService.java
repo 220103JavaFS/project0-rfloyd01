@@ -1,14 +1,19 @@
 package com.revature.services;
 
+import com.revature.controllers.HomepageController;
 import com.revature.dao.UserDAO;
+import com.revature.models.users.Customer;
 import com.revature.models.users.User;
 import com.revature.models.users.UserRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public class UserService {
 
     private UserDAO userDAO = new UserDAO();
+    private static Logger log = LoggerFactory.getLogger(UserService.class); //Do all classes get their own logger?
 
     public ArrayList<User> getAllUsers() {
         return userDAO.getAllUsers();
@@ -92,4 +97,14 @@ public class UserService {
         else return UserDAO.getUserTypeDAO(currentUser);
     }
 
+    public User getBasicUserInformation(String userName) {
+        //A more advanced version of the getUserTypeService function. Returns ALL info about a user, not just username.
+        //Makes a call to the DAO layer to do this. It checks to see that the username isn't blank before making the
+        //request of the DAO because usernames can't be blank.
+
+        //log.info("The username " + userName + " was passed to the getBasicUserInformation() function.");
+
+        if (userName == "") return (User) new Customer(); //just return a blank User, this will trigger error commands in the Control layer
+        else return UserDAO.getBasicUserInformationDAO(userName);
+    }
 }

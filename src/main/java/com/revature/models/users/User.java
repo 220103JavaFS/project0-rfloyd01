@@ -47,5 +47,10 @@ public abstract class User {
 
     protected abstract String encryptPassword(String password); //encrypts password on creation before storing in database for security reasons, different types of users will have different types of encryption
     protected abstract String getPassword(); //decrypts the password and returns the string
+    public boolean comparePassword(String passwordAttempt) {
+        //decrypts an encrypted password to see if it matches the password given to function
+        if (getPassword().equals(passwordAttempt)) return true; //the passwordAttempt string matches the decrypted password
+        return false; //no match, invalid login attempt
+    }
 
 }

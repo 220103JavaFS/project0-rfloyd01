@@ -17,21 +17,22 @@ public class LogoutController extends Controller {
     private Handler logoutDisplay = (ctx) -> {
 
         //first check to see if there's a user logged in, if so, prompt them to logout
-        JSONResponse res = new JSONResponse(); //the JSONResponse class let's us communicate better with Postman
+        //JSONResponse res = new JSONResponse(); //the JSONResponse class let's us communicate better with Postman
+        StringBuilder displayMessage = new StringBuilder("");
         String currentUser = ctx.header("postmanUsername"); //get the current user from HTTP header
 
         if (currentUser == "") {
-            res.messageBody = "Can't logout because you aren't actually already logged in. For information on how to login" +
-                    "please go to {GET - localhost:8080/login}.";
+            displayMessage.append("Can't logout because you aren't actually already logged in. For information on how to login" +
+                    "please go to {GET - localhost:8080/login}.");
             ctx.status(200);
         }
         else {
-            res.messageBody = "Welcome to the Logout Page!!\n" +
+            displayMessage.append("Welcome to the Logout Page!!\n" +
                     "To logout please visit {POST - localhost:8080/logout}. No actual commands will need to" +
-                    "be issued here, just visiting the link will be sufficient to logout.";
+                    "be issued here, just visiting the link will be sufficient to logout.");
             ctx.status(200);
         }
-        ctx.json(res); //always send result to Postman
+        ctx.result(displayMessage.toString()); //always send result to Postman
     };
 
     private Handler logout = (ctx) -> {

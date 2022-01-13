@@ -103,7 +103,21 @@ public class UserController extends Controller {
         }
     };
 
-
+    private Handler createUserMessage = (ctx) -> {
+        //You will only be allowed to create a new user if you aren't currently logged in, as creating a user will
+        //automatically log the new user into the app
+        
+        String resultString = "Welcome to the User View Page!\n" +
+                "To login using Postman please pass a command with the following syntax to 'POST - localhost\\8080\\login':\n" +
+                "{\n" +
+                "    \"username\" : \"{your_username_here}\",\n" +
+                "    \"password\" : \"{your_password_here}\"\n" +
+                "}\n\n" +
+                "Please note that all words must be encased in double quotation marks. Your actual username and password\n" +
+                "will replace the brackets and what's inside of them.";
+        ctx.result(resultString);
+        ctx.status(200);
+    };
 
     @Override
     public void addRoutes(Javalin app) {
@@ -112,7 +126,7 @@ public class UserController extends Controller {
         app.post("/users/view", getUsers);
 
         //User creation
-        //app.get("/users/create", createUserMessage);
+        app.get("/users/create", createUserMessage);
         app.post("/users/create", createUser);
 
         //TODO: Should logging in and out be it's own controller? I'm still a little confused about what exactly should

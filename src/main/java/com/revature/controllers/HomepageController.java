@@ -48,12 +48,12 @@ public class HomepageController extends Controller {
                     displayMessage.append("Look at a specific account by going to {GET - localhost:8080/accounts/{account_number}}\n");
             }
 
-            displayMessage.append("Logout by going to {POST - localhost:8080/logout}"); //all users can logout so put this at the end
+            displayMessage.append("Logout by going to {GET - localhost:8080/logout}"); //all users can logout so put this at the end
             ctx.result(displayMessage.toString());
             ctx.status(200);
         }
         catch (Exception e) {
-            //if nobody is currently logged in then we will get a nullPtrException when trying to acces specific variables
+            //if nobody is currently logged in then we will get a nullPtrException when trying to access specific variables
             //of a user. Since no one is logged in, don't actually stop the program from running, just
             //prompt the user to either login or create an account.
 

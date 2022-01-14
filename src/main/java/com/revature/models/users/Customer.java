@@ -12,7 +12,8 @@ public class Customer extends User {
     private ArrayList<Account> activeAccounts; //a list of active accounts for the user
 
     //Customer specific information
-    public double totalMoney; //The total amount of money across all accounts
+    public int activeAccountRequests =  0; //a user won't start with an open account requests
+    public double totalMoney = 0; //The total amount of money across all accounts
     public double netWorth; //Customer's worth, including things not at bank. Used when creating new accounts
 
     //Constructors

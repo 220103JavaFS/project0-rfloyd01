@@ -1,20 +1,20 @@
-16:58:10.537 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-16:58:10.539 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-16:58:10.540 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-16:58:10.540 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-16:58:10.541 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-16:58:10.541 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-16:58:10.541 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-16:58:10.541 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-16:58:10.542 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-16:58:10.542 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-16:58:10.542 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-16:58:10.542 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-16:58:10.543 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-16:58:10.543 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-16:58:10.543 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-16:58:10.543 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-16:58:10.582 [] [main] INFO  io.javalin.Javalin - 
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
+18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
+18:58:37.683 [] [main] INFO  io.javalin.Javalin - 
        __                      __ _            __ __
       / /____ _ _   __ ____ _ / /(_)____      / // /
  __  / // __ `/| | / // __ `// // // __ \    / // /_
@@ -23,10 +23,24 @@
 
           https://javalin.io/documentation
 
-16:58:10.589 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @314ms to org.eclipse.jetty.util.log.Slf4jLog
-16:58:10.590 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
-16:58:10.604 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 95 days old. Consider upgrading!).
-16:58:10.604 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
-16:58:10.864 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
-16:58:10.864 [] [main] INFO  io.javalin.Javalin - Javalin started in 275ms \o/
-16:58:53.555 [] [qtp428910174-36] INFO  c.r.controllers.HomepageController - The catch block in the Hompage GET handler was invoked.
+18:58:37.683 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @644ms to org.eclipse.jetty.util.log.Slf4jLog
+18:58:37.683 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+18:58:37.715 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 95 days old. Consider upgrading!).
+18:58:37.715 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+18:58:38.100 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+18:58:38.100 [] [main] INFO  io.javalin.Javalin - Javalin started in 417ms \o/
+18:58:49.594 [] [qtp1682463303-37] INFO  com.revature.dao.UserDAO - username passed to the DAO layer is: dfloyd05
+18:59:14.149 [] [qtp1682463303-22] INFO  com.revature.dao.UserDAO - username passed to the DAO layer is: dfloyd05
+18:59:24.864 [] [qtp1682463303-33] INFO  com.revature.dao.UserDAO - username passed to the DAO layer is: dfloyd05
+18:59:24.872 [] [qtp1682463303-33] INFO  com.revature.models.users.User - Encrypted password for Admin: Diana Floyd is sty~wDy?C{u?\1
+18:59:45.389 [] [qtp1682463303-34] INFO  com.revature.dao.UserDAO - The username dfloyd05 was passed to the getBasicUserInformationDAO() function.
+18:59:45.389 [] [qtp1682463303-34] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
+19:04:23.684 [] [qtp1682463303-36] INFO  c.r.controllers.HomepageController - The catch block in the Hompage GET handler was invoked.
+19:04:57.356 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - The username rfloyd01 was passed to the getBasicUserInformationDAO() function.
+19:04:57.356 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
+19:04:57.356 [] [qtp1682463303-36] INFO  com.revature.models.users.User - Actual password for Admin: Robert Floyd is Apples2oranges!
+19:05:11.213 [] [qtp1682463303-40] INFO  com.revature.dao.UserDAO - The username rfloyd01 was passed to the getBasicUserInformationDAO() function.
+19:05:11.213 [] [qtp1682463303-40] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
+19:05:11.213 [] [qtp1682463303-40] INFO  com.revature.models.users.User - Actual password for Admin: Robert Floyd is Apples2oranges!
+19:05:25.618 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - The username rfloyd01 was passed to the getBasicUserInformationDAO() function.
+19:05:25.618 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.

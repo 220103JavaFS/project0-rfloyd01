@@ -4,6 +4,7 @@ import com.revature.dao.UserDAO;
 import com.revature.models.users.Customer;
 import com.revature.models.users.User;
 import com.revature.models.users.UserRequest;
+import com.revature.models.util.JSONResponse;
 import com.revature.services.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
@@ -39,7 +40,7 @@ public class UserController extends Controller {
 
         //First we need to take a look at the Authorization header of the incoming HTTP request to see if the user has
         //access to this page, and if so, what users can they actually see?
-        String currentUser = ctx.header("username");
+        String currentUser = ctx.header("postmanUsername");
 
         //Need to drill down to the service layer and then further down to the DAO layer to figure out the user type
         String userType = userService.getUserTypeService(currentUser);
@@ -72,23 +73,33 @@ public class UserController extends Controller {
         //TODO: should the below user be created by a user factory? I think so since we won't know the kind of user until runtime
         //TODO: to accomplish this the ctx.body() shouldn't contain a user, but some other class, maybe a
         UserRequest u = ctx.bodyAsClass(UserRequest.class);
+        JSONResponse res = new JSONResponse(); //create a JSON response class to get info to postman
+
         int errorId = userService.newUser(u);
         if (errorId == 0) {
-            ctx.result("Successfully created new user.");
-            ctx.status(201); //the user was succesfully created added to the database
+            res.messageBody = "Successfully created new user. You've been automatically logged in." +
+                    "Please visit {GET - localhost:8080} to see what you can do with your new" +
+                    "account!";
+            res.newValue = u.username;
+
+            //If the new user is a customer, they need to be assigned to an employee who wil handle
+            //their accounts. This will require a call down to the DAO layer.
+            if (u.userType.equals("Customer")) userService.assignEmployee();
+
+            ctx.status(201); //the user was successfully created added to the database
         }
         else {
             //something went wrong, print the error message associated with the error code
             if (errorId == 0b10000000)
             {
-                ctx.result("The user was succesfully created, however, an unknown error" +
-                        "occured when trying to add them to the database. Please try again later");
+                res.messageBody = "The user was succesfully created, however, an unknown error" +
+                        "occured when trying to add them to the database. Please try again later";
                 ctx.status(500); //server or database error
             }
             else {
-                //there can be multiple error bits so we need to check for each one in an if statement
+                //there can be multiple error bits so we need to check for each one in an if statement, not an else if
 
-                StringBuilder errorMessage = new StringBuilder();
+                StringBuilder errorMessage = new StringBuilder("Couldn't create new user:\n");
                 if ((errorId & 0b1000000) > 0) {errorMessage.append("Password didn't include a special character, please update password.\n");}
                 if ((errorId & 0b100000) > 0) {errorMessage.append("Password didn't include a number, please update password.\n");}
                 if ((errorId & 0b10000) > 0) {errorMessage.append("Password didn't include a lowercase letter, please update password.\n");}
@@ -97,33 +108,59 @@ public class UserController extends Controller {
                 if ((errorId & 0b10) > 0) {errorMessage.append("Username is already taken, please use a different username.\n");}
                 if ((errorId & 0b1) > 0) {errorMessage.append("Not a valid user type, please select a valid user type.\n");}
 
-                ctx.result("Couldn't create new user:\n" + errorMessage); //add error message in the response
+                res.messageBody = errorMessage.toString(); //add error message in the response
                 ctx.status(400); //request error
             }
         }
+        ctx.json(res);
     };
 
     private Handler createUserMessage = (ctx) -> {
         //You will only be allowed to create a new user if you aren't currently logged in, as creating a user will
         //automatically log the new user into the app
-        
-        String resultString = "Welcome to the User View Page!\n" +
-                "To login using Postman please pass a command with the following syntax to 'POST - localhost\\8080\\login':\n" +
-                "{\n" +
-                "    \"username\" : \"{your_username_here}\",\n" +
-                "    \"password\" : \"{your_password_here}\"\n" +
-                "}\n\n" +
-                "Please note that all words must be encased in double quotation marks. Your actual username and password\n" +
-                "will replace the brackets and what's inside of them.";
-        ctx.result(resultString);
-        ctx.status(200);
+        String currentUser = ctx.header("postmanUsername");
+        StringBuilder resultString = new StringBuilder();
+        //log.info("Current user from postman is:" + currentUser);
+
+        if (currentUser == ""){
+            resultString.append("Welcome to the User Creation Page!\n" +
+                    "To create a new user please pass a command with the following syntax to {POST - localhost/8080/users/create}:\n" +
+                    "{\n" +
+                    "    \"userType\"  : \"{your_userType_here}\",\n" +
+                    "    \"firstName\" : \"{your_firstName_here}\",\n" +
+                    "    \"lastName\"  : \"{your_lastName_here}\",\n" +
+                    "    \"username\"  : \"{your_username_here}\",\n" +
+                    "    \"password\"  : \"{your_password_here}\"\n" +
+                    "}\n\n" +
+                    "Please note that all words must be encased in double quotation marks. Your actual information will \n" +
+                    "replace the brackets and what's inside of them. There are a few rules for successful account creation.\n" +
+                    "1. The user type must be either Customer, Employee or Admin. The first letter must be capitalized.\n" +
+                    "2. Your username must be unique. If an existing user already has that username you will be prompted to change it.\n" +
+                    "3. The password must be at least 10 characters long, contain both an uppercase and lowercase letter, contain " +
+                    "a number, and contain a unique character such as !, @ or &\n\n" +
+                    "Here's an example of a successful entry:\n" +
+                    "{\n" +
+                    "    \"userType\"  : \"Customer\",\n" +
+                    "    \"firstName\" : \"Robert\",\n" +
+                    "    \"lastName\"  : \"Floyd\",\n" +
+                    "    \"username\"  : \"rfloyd01\",\n" +
+                    "    \"password\"  : \"Coding_is_kewl34\"\n" +
+                    "}");
+            ctx.status(200);
+        }
+        else {
+            resultString.append("You must logout before creating a new user. To do so please visit " +
+                    "{GET - localhost:8080/logout} for more information.");
+            ctx.status(200);
+        }
+        ctx.result(resultString.toString()); //print out the body to Postman
     };
 
     @Override
     public void addRoutes(Javalin app) {
         //User viewing
-        app.get("/users/view", getUsersMessage);
-        app.post("/users/view", getUsers);
+        app.get("/users", getUsersMessage);
+        app.post("/users", getUsers);
 
         //User creation
         app.get("/users/create", createUserMessage);

@@ -46,7 +46,7 @@ public class UserService {
         }
 
         //Next, we need to access the DAO layer to see if the selected username already exists or not
-        if (!validUsernameDAO(u.username)) errorCode |= 0b10;
+        if (!userDAO.validUsernameDAO(u.username)) errorCode |= 0b10;
 
         //Finally, we need to make sure that the password passed in with the 'u' parameter meets the strict password
         //requirements. These requirements are:
@@ -80,13 +80,6 @@ public class UserService {
         //if we get to this point in the loop then something was wrong with the UserRequest, return the full error code
         //without creating a user
         return errorCode;
-    }
-
-    private boolean validUsernameDAO(String username) {
-        //this function scans the database to see if the existing username already exists or not.
-        //if the name already exists it returns false, otherwise, it returns true
-        //TODO: I currently don't have database functionality, return here after I do. For now just always return true
-        return true;
     }
 
     public String getUserTypeService(String currentUser) {

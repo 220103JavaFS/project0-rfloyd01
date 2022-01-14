@@ -13,4 +13,16 @@ public class HomeService {
     public List<Home> findAllHomes() {
         return homeDAO.findAll();
     }
+
+    public Home findHome(String name) {
+        return homeDAO.findByName(name);
+    }
+
+    public boolean updateHome(Home home) {
+        return homeDAO.updateHome(home);
+    }
+
+    public boolean addHome(Home home) {
+        return homeDAO.addHome(home);
+    }
 }

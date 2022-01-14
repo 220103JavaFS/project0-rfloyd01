@@ -20,7 +20,7 @@ public class UserController extends Controller {
     //only Employees and Admins do. Employees view will be restricted so that they can only see their own clients
     //while Admins will be able to see everybody in the database.
 
-    private UserService userService = new UserService();
+    private UserService userService = UserService.getUserService();
     private static Logger log = LoggerFactory.getLogger(UserController.class); //Do all classes get their own logger?
 
     private Handler getUsersMessage = (ctx) -> {

@@ -14,6 +14,9 @@ public class UserService {
 
     private UserDAO userDAO = new UserDAO();
     private static Logger log = LoggerFactory.getLogger(UserService.class); //Do all classes get their own logger?
+    private static UserService userService; //used for singleton class
+
+    private UserService() {super();}
 
     public ArrayList<User> getAllUsers() {
         return userDAO.getAllUsers();
@@ -99,5 +102,11 @@ public class UserService {
 
         if (userName == "") return (User) new Customer(); //just return a blank User, this will trigger error commands in the Control layer
         else return UserDAO.getBasicUserInformationDAO(userName);
+    }
+
+    public static UserService getUserService() {
+        if (userService != null) return userService;
+        userService = new UserService();
+        return userService;
     }
 }

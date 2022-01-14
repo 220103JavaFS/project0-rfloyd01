@@ -57,6 +57,14 @@ public class LoginController extends Controller {
             //since no one is currently logged in we are ok to proceed with the below logic
             User loginUser = userService.getBasicUserInformation(loggy.username);
 
+            //TODO: ctx.req.getSession(); //This will return an HttpSession object. If none exists a new one will be created
+            //  and a cookie will be added to the response for the client to store. This is an easier way to keep track of currentUser information
+            //  which will be easier then using a Postman global variable. Update code with this. If a login with bad credentials occurs then
+            //  the session can be ended with ctx.req.getSession().invalidate(); //invalidates any open session. This is also how you logout
+            //  under normal conditions. HTTP encrypts the body of a message, so sensitve data should be included in the body and not in a header.
+            //  ctx.req.getSession(false) will only return a session object if the client sent a cookie along with the request that matches an
+            //  open session
+
             try {
                 //if the username exists in the database then this try block will succeed, however, we need to
                 //check that the password matches what's in the database.

@@ -1,25 +1,8 @@
-14:13:19.429 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-14:13:19.431 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-14:13:19.431 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-14:13:19.431 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-14:13:19.479 [] [main] INFO  io.javalin.Javalin -
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-18:58:37.599 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-18:58:37.683 [] [main] INFO  io.javalin.Javalin -
+16:21:00.830 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
+16:21:00.832 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
+16:21:00.832 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
+16:21:00.832 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
+16:21:00.880 [] [main] INFO  io.javalin.Javalin - 
        __                      __ _            __ __
       / /____ _ _   __ ____ _ / /(_)____      / // /
  __  / // __ `/| | / // __ `// // // __ \    / // /_
@@ -28,30 +11,9 @@
 
           https://javalin.io/documentation
 
-14:13:19.486 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @345ms to org.eclipse.jetty.util.log.Slf4jLog
-14:13:19.487 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
-14:13:19.503 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 96 days old. Consider upgrading!).
-14:13:19.503 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
-14:13:19.783 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
-14:13:19.784 [] [main] INFO  io.javalin.Javalin - Javalin started in 297ms \o/
-18:58:37.683 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @644ms to org.eclipse.jetty.util.log.Slf4jLog
-18:58:37.683 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
-18:58:37.715 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 95 days old. Consider upgrading!).
-18:58:37.715 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
-18:58:38.100 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
-18:58:38.100 [] [main] INFO  io.javalin.Javalin - Javalin started in 417ms \o/
-18:58:49.594 [] [qtp1682463303-37] INFO  com.revature.dao.UserDAO - username passed to the DAO layer is: dfloyd05
-18:59:14.149 [] [qtp1682463303-22] INFO  com.revature.dao.UserDAO - username passed to the DAO layer is: dfloyd05
-18:59:24.864 [] [qtp1682463303-33] INFO  com.revature.dao.UserDAO - username passed to the DAO layer is: dfloyd05
-18:59:24.872 [] [qtp1682463303-33] INFO  com.revature.models.users.User - Encrypted password for Admin: Diana Floyd is sty~wDy?C{u?\1
-18:59:45.389 [] [qtp1682463303-34] INFO  com.revature.dao.UserDAO - The username dfloyd05 was passed to the getBasicUserInformationDAO() function.
-18:59:45.389 [] [qtp1682463303-34] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
-19:04:23.684 [] [qtp1682463303-36] INFO  c.r.controllers.HomepageController - The catch block in the Hompage GET handler was invoked.
-19:04:57.356 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - The username rfloyd01 was passed to the getBasicUserInformationDAO() function.
-19:04:57.356 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
-19:04:57.356 [] [qtp1682463303-36] INFO  com.revature.models.users.User - Actual password for Admin: Robert Floyd is Apples2oranges!
-19:05:11.213 [] [qtp1682463303-40] INFO  com.revature.dao.UserDAO - The username rfloyd01 was passed to the getBasicUserInformationDAO() function.
-19:05:11.213 [] [qtp1682463303-40] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
-19:05:11.213 [] [qtp1682463303-40] INFO  com.revature.models.users.User - Actual password for Admin: Robert Floyd is Apples2oranges!
-19:05:25.618 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - The username rfloyd01 was passed to the getBasicUserInformationDAO() function.
-19:05:25.618 [] [qtp1682463303-36] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
+16:21:00.886 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @331ms to org.eclipse.jetty.util.log.Slf4jLog
+16:21:00.887 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+16:21:00.903 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 96 days old. Consider upgrading!).
+16:21:00.903 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+16:21:01.167 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+16:21:01.167 [] [main] INFO  io.javalin.Javalin - Javalin started in 280ms \o/

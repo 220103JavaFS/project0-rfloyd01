@@ -84,7 +84,7 @@ public class UserController extends Controller {
 
             //If the new user is a customer, they need to be assigned to an employee who wil handle
             //their accounts. This will require a call down to the DAO layer.
-            if (u.userType.equals("Customer")) userService.assignEmployee();
+            //if (u.userType.equals("Customer")) userService.assignEmployee();
 
             ctx.status(201); //the user was successfully created added to the database
         }

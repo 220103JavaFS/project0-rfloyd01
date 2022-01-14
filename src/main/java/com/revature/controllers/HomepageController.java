@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 public class HomepageController extends Controller {
 
-    private UserService userService = new UserService(); //is it ok to have multiple userService objects?
+    private UserService userService = UserService.getUserService(); //is it ok to have multiple userService objects?
     private static Logger log = LoggerFactory.getLogger(HomepageController.class); //Do all classes get their own logger?
 
     private Handler homepageGet = (ctx) -> {
@@ -17,7 +17,7 @@ public class HomepageController extends Controller {
         //you can do.
 
         StringBuilder displayMessage = new StringBuilder("");
-        String userName = ctx.header("postmanUsername"); //get the username from the custom HTTP header
+        String userName = ctx.header(postmanUsername); //get the username from the custom HTTP header
         User user = userService.getBasicUserInformation(userName); //returns basic info about the user, such as real name and userType
 
         try {

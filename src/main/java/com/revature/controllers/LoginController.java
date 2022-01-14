@@ -7,16 +7,10 @@ import com.revature.models.util.LoginAttempt;
 import com.revature.services.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginController extends Controller {
 
-    //private LoginService loginService = new LoginService();
-    private UserService userService = new UserService(); //is it ok to have multiple userService objects?
+    private UserService userService = UserService.getUserService(); //is it ok to have multiple userService objects?
 
     private Handler loginDisplay = (ctx) -> {
         //Display functions will return with ctx.result() instead of ctx.json() for better readability.

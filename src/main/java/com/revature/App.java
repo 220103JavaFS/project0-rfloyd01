@@ -4,6 +4,10 @@ import com.revature.controllers.*;
 import com.revature.models.users.User;
 import io.javalin.Javalin;
 
+import java.sql.SQLException;
+
+import static com.revature.models.util.ConnectionUtil.getConnection;
+
 public class App {
 
     private static Javalin app;
@@ -11,7 +15,16 @@ public class App {
     public static void main(String[] args) {
         app = Javalin.create();
 
-        configure(new UserController(), new LoginController(), new LogoutController(), new HomepageController());
+        configure(new UserController(), new LoginController(), new LogoutController(), new HomepageController(), new HomeController());
+
+//        try {
+//            getConnection();
+//            System.out.println("Connection successful");
+//        } catch (SQLException e) {
+//            System.out.println("Conenction failed.");
+//            e.printStackTrace();
+//        }
+
         app.start();
 
     }

@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 public class LogoutController extends Controller {
 
     //TODO: currently all HTTP status codes are set to 200, update these at some point
-    private UserService userService = new UserService(); //is it ok to have multiple userService objects?
+    private UserService userService = UserService.getUserService(); //is it ok to have multiple userService objects?
 
     private Handler logoutDisplay = (ctx) -> {
 

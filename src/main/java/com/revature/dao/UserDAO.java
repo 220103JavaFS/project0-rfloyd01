@@ -79,4 +79,13 @@ public class UserDAO {
             return 0b10000000;
         }
     }
+
+    public boolean validUsernameDAO(String username) {
+        //this function scans the user database to see if the passed username already exists or not
+        log.info("username passed to the DAO layer is: " + username);
+        for (User u:users) {
+            if (u.username.equals(username)) return false;
+        }
+        return true; //didn't find the username in the database so the passed username is free to be used.
+    }
 }

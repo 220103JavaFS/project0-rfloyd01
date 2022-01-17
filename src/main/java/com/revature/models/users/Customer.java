@@ -29,6 +29,8 @@ public class Customer extends User {
         this.password = encryptPassword(password);
     }
 
+    public Employee getAssignedEmployee() {return assignedEmployee;}
+
     @Override
     protected String encryptPassword(String password) {
         StringBuilder encryptedPassword = new StringBuilder(password); //use string builder to build one char at a time
@@ -98,4 +100,16 @@ public class Customer extends User {
         else System.out.println("Invalid amount, funds not added to account.");
     }
 
+    @Override
+    public String toString() {
+        //print all the basic fields that a user has (minus the password) as well as a list of all
+        //active accounts for the customer
+        return "User{" +
+                "userType='" + userType + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", activeAccounts=" + activeAccounts +
+                '}';
+    }
 }

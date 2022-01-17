@@ -1,8 +1,8 @@
-16:21:00.830 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
-16:21:00.832 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
-16:21:00.832 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
-16:21:00.832 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
-16:21:00.880 [] [main] INFO  io.javalin.Javalin - 
+17:32:29.372 [] [main] INFO  com.revature.models.users.User - Encrypted password for Admin: Robert Floyd is Q??|u?B?q~wu?1
+17:32:29.377 [] [main] INFO  com.revature.models.users.User - Encrypted password for Employee: Scott Olsen is `???z?xfz?JK
+17:32:29.377 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Jonathan Miller is ;<=Kl++zy?v
+17:32:29.378 [] [main] INFO  com.revature.models.users.User - Encrypted password for Customer: Daniel Preuss is MynsxqS}Uo?v><:.
+17:32:29.475 [] [main] INFO  io.javalin.Javalin - 
        __                      __ _            __ __
       / /____ _ _   __ ____ _ / /(_)____      / // /
  __  / // __ `/| | / // __ `// // // __ \    / // /_
@@ -11,9 +11,13 @@
 
           https://javalin.io/documentation
 
-16:21:00.886 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @331ms to org.eclipse.jetty.util.log.Slf4jLog
-16:21:00.887 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
-16:21:00.903 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 96 days old. Consider upgrading!).
-16:21:00.903 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
-16:21:01.167 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
-16:21:01.167 [] [main] INFO  io.javalin.Javalin - Javalin started in 280ms \o/
+17:32:29.488 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @666ms to org.eclipse.jetty.util.log.Slf4jLog
+17:32:29.490 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+17:32:29.519 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 99 days old. Consider upgrading!).
+17:32:29.519 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+17:32:29.919 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+17:32:29.919 [] [main] INFO  io.javalin.Javalin - Javalin started in 429ms \o/
+17:32:43.876 [] [qtp1543974463-36] INFO  com.revature.dao.UserDAO - The username rfloyd01 was passed to the getBasicUserInformationDAO() function.
+17:32:43.877 [] [qtp1543974463-36] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
+17:32:43.877 [] [qtp1543974463-36] INFO  com.revature.models.users.User - Actual password for Admin: Robert Floyd is Apples2oranges!
+17:32:43.892 [] [qtp1543974463-36] INFO  com.revature.controllers.Controller - Employee{userType='Admin', firstName='Robert', lastName='Floyd', username='rfloyd01'}

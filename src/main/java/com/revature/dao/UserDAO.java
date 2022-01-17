@@ -44,7 +44,7 @@ public class UserDAO {
 
         //TODO: Add database functionality after learning it.
 
-        log.info("The username " + userName + " was passed to the getBasicUserInformationDAO() function.");
+        //log.info("The username " + userName + " was passed to the getBasicUserInformationDAO() function.");
 
         //Scan the database to and return the information associated with the username
         for (User u:users) {
@@ -54,8 +54,8 @@ public class UserDAO {
             }
         }
 
-        //if no username match was found then return a blank user which will kick up an exception in the Controller layer
-        return (User) new Customer(); //this could be a customer, employee or admin, it doesn't matter and will trigger the exceptio regardless.
+        //if no username match was found then return null
+        return null;
     }
 
     public ArrayList<User> getAllUsers() {

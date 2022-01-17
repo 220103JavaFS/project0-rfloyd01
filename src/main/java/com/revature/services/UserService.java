@@ -100,7 +100,7 @@ public class UserService {
 
         //log.info("The username " + userName + " was passed to the getBasicUserInformation() function.");
 
-        if (userName == "") return (User) new Customer(); //just return a blank User, this will trigger error commands in the Control layer
+        if (userName == "") return null; //just return a null User, this will trigger error commands in the Control layer
         else return UserDAO.getBasicUserInformationDAO(userName);
     }
 

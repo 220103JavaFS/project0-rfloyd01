@@ -53,4 +53,12 @@ public abstract class User {
         return false; //no match, invalid login attempt
     }
 
+    public String toString() {
+        return "User{" +
+                "userType='" + userType + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                '}';
+    }
 }

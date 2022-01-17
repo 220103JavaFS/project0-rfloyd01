@@ -109,4 +109,17 @@ public class Employee extends User {
     public void sendMessage (User u, Message m) {
 
     }
+
+    @Override
+    public String toString() {
+        //print out all of the basic fields of a user (minus the password) as well as a list of all
+        //the employees customers
+        return "User{" +
+                "userType='" + userType + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", assignedCustomers=" + assignedCustomers +
+                '}';
+    }
 }

@@ -21,52 +21,59 @@ public class UserController extends Controller {
     //while Admins will be able to see everybody in the database.
 
     private UserService userService = UserService.getUserService();
-    private static Logger log = LoggerFactory.getLogger(UserController.class); //Do all classes get their own logger?
 
-    private Handler getUsersMessage = (ctx) -> {
-        String resultString = "Welcome to the User View Page!\n" +
-                "To login using Postman please pass a command with the following syntax to 'POST - localhost\\8080\\login':\n" +
-                "{\n" +
-                "    \"username\" : \"{your_username_here}\",\n" +
-                "    \"password\" : \"{your_password_here}\"\n" +
-                "}\n\n" +
-                "Please note that all words must be encased in double quotation marks. Your actual username and password\n" +
-                "will replace the brackets and what's inside of them.";
-        ctx.result(resultString);
-        ctx.status(200);
-    };
-
-    private Handler getUsers = (ctx) -> {
-
-        //First we need to take a look at the Authorization header of the incoming HTTP request to see if the user has
-        //access to this page, and if so, what users can they actually see?
-        String currentUser = ctx.header("postmanUsername");
-
-        //Need to drill down to the service layer and then further down to the DAO layer to figure out the user type
-        String userType = userService.getUserTypeService(currentUser);
-        ArrayList<User> userList;
-        switch (userType) {
-            case "Employee":
-                //userList = userService.getCustomers(currentUser);
-                break;
-            case "Admin":
-                userList = userService.getAllUsers();
-                break;
-            default:
-                ctx.result("You don't have access to this page.");
-                ctx.status(401);
-                return; //TODO: can you tell a handler function to return? it has no return type
-
+    private Handler getUser = (ctx) -> {
+        //First we need to make sure that someone is logged in, if not, restrict access to this endpoint
+        if (ctx.req.getSession(false) != null) {
+            //the info on the current user is stored in the session cookie, just print it out
+            ctx.json(ctx.req.getAttribute("User"));
+            ctx.status(200); //set status to 200 ok
         }
-
-        //ctx.json(userList);
-        ctx.status(200);
-
+        else ctx.status(401); //set status to 401 unauthorized
     };
 
-    //TODO: create a getAllEmployees Handler
+    private Handler getSpecificUser = (ctx) -> {
+        //First we need to make sure that someone is logged in, if not, restrict access to this endpoint
+        if (ctx.req.getSession(false) != null) {
 
-    //TODO: create a getAllCustomers Handler
+            //only employees and admins can access this page, if a customer is logged in then restrict access
+            User existingUser = (User)ctx.req.getAttribute("User");
+            if (existingUser.userType == "Customer") {
+                ctx.status(401); //set status to 401 not authorized
+            }
+            else {
+                String userName = ctx.pathParam("user_name");
+                User desiredUser = userService.getBasicUserInformation(userName); //
+
+                if (desiredUser != null) {
+                    if (existingUser.userType.equals("Admin")) {
+                        //admins can view anyone else info so just display the user
+                        ctx.json(desiredUser);
+                    }
+                    else {
+                        //the current user logged in is an employee, they can only view their own customers
+                        if (desiredUser.userType == "Customer") {
+                            Customer castUser = (Customer)desiredUser;
+                            if (castUser.getAssignedEmployee().username.equals(existingUser.username)) {
+                                //employee has access
+                                ctx.json(castUser);
+                                ctx.status(200);
+                            }
+                            else ctx.status(401); //access restricted
+                        }
+                        else ctx.status(401); //not authorized to view this user
+                    }
+                }
+                else {
+                    //the username in the path doesn't exist in the database, set status to 404 not found
+                    ctx.status(404);
+                }
+                ctx.json(ctx.req.getAttribute("User"));
+                ctx.status(200); //set status to 200 ok
+            }
+        }
+        else ctx.status(401); //set status to 401 unauthorized
+    };
 
     private Handler createUser = (ctx) -> {
 
@@ -159,17 +166,13 @@ public class UserController extends Controller {
     @Override
     public void addRoutes(Javalin app) {
         //User viewing
-        app.get("/users", getUsersMessage);
-        app.post("/users", getUsers);
+        app.get("/users", getUser); //returns info for the user currently logged in
+        app.get("/users/{user_name}", getSpecificUser); //returns info for the user specified by "user_name" variable
 
         //User creation
-        app.get("/users/create", createUserMessage);
-        app.post("/users/create", createUser);
+        app.post("/users", createUser);
 
-        //TODO: Should logging in and out be it's own controller? I'm still a little confused about what exactly should
-        //  get a controller. In my mind, each model class (or group of model classes) would have a separate controller
-        //  that's capable of handling many different functions. Or maybe it's more like anything that would have a
-        //  separate endpoint (i.e. /users and /login) would need different controllers? Should ask Tim for clarification.
-
+        //User editing
+        //app.put("/users", editUser);
     }
 }

@@ -11,6 +11,22 @@ public class Employee extends User {
     private ArrayList<Customer> assignedCustomers; //each employee will be responsible for a set amount of customers, this will be hanled by admins
     private ArrayDeque<NewAccountRequest> newAccountRequests; //this will be utilized like a queue to handle requests on a first come first served basis
 
+    public ArrayList<Customer> getAssignedCustomers() {
+        return assignedCustomers;
+    }
+
+    public void setAssignedCustomers(ArrayList<Customer> assignedCustomers) {
+        this.assignedCustomers = assignedCustomers;
+    }
+
+    public ArrayDeque<NewAccountRequest> getNewAccountRequests() {
+        return newAccountRequests;
+    }
+
+    public void setNewAccountRequests(ArrayDeque<NewAccountRequest> newAccountRequests) {
+        this.newAccountRequests = newAccountRequests;
+    }
+
     public void addCustomer(Customer cust) {
         assignedCustomers.add(cust);
     }

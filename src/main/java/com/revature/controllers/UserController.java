@@ -66,7 +66,9 @@ public class UserController extends Controller {
                             //log.info("An employee is currently attempting to look at a Customer in the database.");
                             Customer castUser = (Customer)desiredUser;
 
-                            if (castUser.getAssignedEmployee().username.equals(existingUser.username)) {
+                            //TODO:The below is going to acquire a look into the DB to see who the assigned employee is. Uncomment below at some point
+                            //if (castUser.getAssignedEmployee().username.equals(existingUser.username)) {
+                            if (true) {
                                 //employee has access
                                 ctx.json(castUser);
                                 ctx.status(200);

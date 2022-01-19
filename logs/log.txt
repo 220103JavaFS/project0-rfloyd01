@@ -1,4 +1,4 @@
-20:35:15.139 [] [main] INFO  io.javalin.Javalin - 
+20:53:26.196 [] [main] INFO  io.javalin.Javalin - 
        __                      __ _            __ __
       / /____ _ _   __ ____ _ / /(_)____      / // /
  __  / // __ `/| | / // __ `// // // __ \    / // /_
@@ -7,9 +7,13 @@
 
           https://javalin.io/documentation
 
-20:35:15.147 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @313ms to org.eclipse.jetty.util.log.Slf4jLog
-20:35:15.147 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
-20:35:15.161 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 100 days old. Consider upgrading!).
-20:35:15.161 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
-20:35:15.414 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
-20:35:15.414 [] [main] INFO  io.javalin.Javalin - Javalin started in 267ms \o/
+20:53:26.211 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @655ms to org.eclipse.jetty.util.log.Slf4jLog
+20:53:26.213 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+20:53:26.238 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 100 days old. Consider upgrading!).
+20:53:26.238 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+20:53:26.623 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+20:53:26.623 [] [main] INFO  io.javalin.Javalin - Javalin started in 411ms \o/
+20:53:59.942 [] [qtp345281752-36] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
+20:53:59.955 [] [qtp345281752-36] INFO  com.revature.controllers.Controller - Login by: User{userType='Employee', firstName='Scott', lastName='Olsen', username='Sno19', assignedCustomers=[User{userType='Customer', firstName='Jonathan', lastName='Miller', username='JJMM07', activeAccounts=[]}]}
+20:54:58.746 [] [qtp345281752-38] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.
+20:56:13.575 [] [qtp345281752-21] INFO  com.revature.dao.UserDAO - User was found, passing info up from the DAO layer.

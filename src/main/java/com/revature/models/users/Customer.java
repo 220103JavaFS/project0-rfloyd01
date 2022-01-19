@@ -8,7 +8,7 @@ public class Customer extends User {
 
     //TODO - currently each customer has a reference variable pointing to their employee, but each employee also has
     //TODO - reference variables pointing to their customers. Is it good form to have two objects pointing at eachother?
-    private Employee assignedEmployee; //every user will have an employee at the bank responsible for their accounts, this will be assigned or reassigned by an admin
+    //private Employee assignedEmployee; //every user will have an employee at the bank responsible for their accounts, this will be assigned or reassigned by an admin
     private ArrayList<Account> activeAccounts; //a list of active accounts for the user
 
     //Customer specific information
@@ -27,12 +27,6 @@ public class Customer extends User {
 
         //also need to create a list to hold accounts (which will be an empty list upon creation)
         activeAccounts = new ArrayList<>();
-    }
-
-    public Employee getAssignedEmployee() {return assignedEmployee;}
-
-    public void setAssignedEmployee(Employee emp) {
-        assignedEmployee = emp;
     }
 
     @Override
@@ -71,7 +65,6 @@ public class Customer extends User {
         //adds a request for a new account to the back of the queue of the employee that's responsible
         //for the customer
         NewAccountRequest req = new NewAccountRequest(this, accountType);
-        assignedEmployee.addAccountRequest(req);
     }
 
     public void addAccount(Account acc) {

@@ -30,8 +30,8 @@ public class UserDAO {
         //finally add some customers
         Customer Jonathan = new Customer("Customer", "Jonathan", "Miller", "JJMM07", "123Ab!!powl");
         Customer Dan = new Customer("Customer", "Daniel", "Preuss", "DanThaMan", "CodingIsKewl420$");
-        Jonathan.setAssignedEmployee(Scott);
-        Dan.setAssignedEmployee(Billy);
+        //Jonathan.setAssignedEmployee(Scott);
+        //Dan.setAssignedEmployee(Billy);
         users.add(Jonathan);
         users.add(Dan);
 

@@ -45,4 +45,20 @@ public class UserRequest {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    public void encryptPassword(String encryptionType) {
+        if (encryptionType.equals("Customer")) {
+            Customer temp = new Customer(); //TODO: make the encryption functions static so I don't need to create an instance for encryption
+            this.password = temp.encryptPassword(this.password);
+        }
+        else if (encryptionType.equals("Employee")) {
+            Employee temp = new Employee(); //TODO: make the encryption functions static so I don't need to create an instance for encryption
+            this.password = temp.encryptPassword(this.password);
+        }
+        else {
+            //default to admin encryption if there's something wrong with the ecryptionType String
+            Admin temp = new Admin(); //TODO: make the encryption functions static so I don't need to create an instance for encryption
+            this.password = temp.encryptPassword(this.password);
+        }
+    }
 }

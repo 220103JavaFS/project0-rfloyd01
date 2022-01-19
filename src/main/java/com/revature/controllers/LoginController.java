@@ -1,9 +1,8 @@
 package com.revature.controllers;
 
-import com.revature.models.Home;
-import com.revature.models.users.Customer;
+import com.revature.models.users.Admin;
+import com.revature.models.users.Employee;
 import com.revature.models.users.User;
-import com.revature.models.util.JSONResponse;
 import com.revature.models.util.LoginAttempt;
 import com.revature.services.UserService;
 import io.javalin.Javalin;
@@ -17,11 +16,22 @@ public class LoginController extends Controller {
         //I know were not really supposed to have a front end, but, for ease of use
         //this just shows a sample login attempt
 
-        String messageBody = "JSON format for logging in:\n" +
+        String messageBody = "Existing users for testing purposes, only copy one set of brackets:\n\n" +
+                "Admin Example:\n" +
                 "{\n" +
                 "    \"username\" : \"rfloyd01\",\n" +
-                "    \"password\" : \"Coding_is_kewl07\"\n" +
-                "}";
+                "    \"password\" : \"Apples2oranges!\"\n" +
+                "}\n\n" +
+                "Employee Example:\n" +
+                "{\n" +
+                "    \"username\" : \"Sno19\",\n" +
+                "    \"password\" : \"Guitar_Man12\"\n" +
+                "}\n\n" +
+                "Customer Example:\n" +
+                "{\n" +
+                "    \"username\" : \"JJMM07\",\n" +
+                "    \"password\" : \"123Ab!!powl\"\n" +
+                "}\n\n";;
         ctx.status(200);
         ctx.result(messageBody); //always send result to Postman
     };
@@ -55,12 +65,19 @@ public class LoginController extends Controller {
                 if (loginUser.comparePassword(loggy.password)) {
                     //if the password in the login attempt matches the decrypted password of the found user then
                     //log them into the system
+
                     ctx.req.getSession(); //add cookie for the logged in user
-                    ctx.req.setAttribute("User", loginUser); //store userinformation in cookie for easy access later on
+
+                    //before storing user information in cookie, downcast to the appropriate type of user
+//                    if (loginUser.userType.equals("Admin")) ctx.sessionAttribute("User", (Admin)loginUser);
+//                    else if (loginUser.userType.equals("Employee")) ctx.sessionAttribute("User", (Employee)loginUser);
+//                    else ctx.sessionAttribute("User", (Employee)loginUser);
+                    ctx.sessionAttribute("User", loginUser); //set the current user in the session cookie
+
                     ctx.status(202); //return 202 Accepted code
 
                     //For testing purposes, print out basic user information to the log
-                    log.info("Login by: " + ctx.req.getAttribute("User").toString());
+                    log.info("Login by: " + ctx.sessionAttribute("User").toString());
                 }
                 else {
                     //the username exists, however, the password was incorrect. Return 400 Bad Request code

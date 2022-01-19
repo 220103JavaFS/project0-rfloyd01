@@ -9,14 +9,11 @@ public class Admin extends User {
     }
 
     public Admin (String userType, String firstName, String lastName, String username, String password) {
-        super(userType, firstName, lastName, username);
-
-        //need to encrypt the password before storing it
-        this.password = encryptPassword(password);
+        super(userType, firstName, lastName, username, password);
     }
 
     @Override
-    protected String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         StringBuilder encryptedPassword = new StringBuilder(password); //use string builder to build one char at a time
         char newChar;
 
@@ -27,7 +24,7 @@ public class Admin extends User {
             newChar += 16;
             encryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Encrypted password for Admin: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
+        //log.info("Encrypted password for Admin: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
         return encryptedPassword.toString();
     }
 
@@ -42,7 +39,12 @@ public class Admin extends User {
             newChar -= 16;
             decryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Actual password for Admin: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
+        //log.info("Actual password for Admin: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
         return decryptedPassword.toString();
+    }
+
+    public void assignCustomer(Employee emp, Customer cust) {
+        //adds the customer to the employees customer list
+        emp.addCustomer(cust);
     }
 }

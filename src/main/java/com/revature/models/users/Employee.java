@@ -2,31 +2,34 @@ package com.revature.models.users;
 
 import com.revature.models.util.Message;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Queue;
 
 public class Employee extends User {
 
     private ArrayList<Customer> assignedCustomers; //each employee will be responsible for a set amount of customers, this will be hanled by admins
-    private Queue<NewAccountRequest> newAccountRequests; //a list of account requests needing approval, first come first served
+    private ArrayDeque<NewAccountRequest> newAccountRequests; //this will be utilized like a queue to handle requests on a first come first served basis
 
-    void addCustomer(Customer cust) {
+    public void addCustomer(Customer cust) {
         assignedCustomers.add(cust);
     }
 
     public Employee() {
+
         super();
+        assignedCustomers = new ArrayList<>(); //initialize list of customers
+        newAccountRequests = new ArrayDeque<>(); //initialize account requests deque
     }
 
     public Employee(String userType, String firstName, String lastName, String username, String password) {
-        super(userType, firstName, lastName, username);
-
-        //need to encrypt the password before storing it
-        this.password = encryptPassword(password);
+        super(userType, firstName, lastName, username, password);
+        assignedCustomers = new ArrayList<>(); //initialize list of customers
+        newAccountRequests = new ArrayDeque<>(); //initialize account requests deque
     }
 
     @Override
-    protected String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         StringBuilder encryptedPassword = new StringBuilder(password); //use string builder to build one char at a time
         char newChar;
 
@@ -37,7 +40,7 @@ public class Employee extends User {
             newChar += 25;
             encryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Encrypted password for Employee: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
+        //log.info("Encrypted password for Employee: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
         return encryptedPassword.toString();
     }
 
@@ -52,7 +55,7 @@ public class Employee extends User {
             newChar -= 25;
             decryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Actual password for Employee: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
+        //log.info("Actual password for Employee: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
         return decryptedPassword.toString();
     }
 

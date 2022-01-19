@@ -23,16 +23,20 @@ public class Customer extends User {
     }
 
     public Customer(String userType, String firstName, String lastName, String username, String password) {
-        super(userType, firstName, lastName, username);
+        super(userType, firstName, lastName, username, password);
 
-        //need to encrypt the password before storing it
-        this.password = encryptPassword(password);
+        //also need to create a list to hold accounts (which will be an empty list upon creation)
+        activeAccounts = new ArrayList<>();
     }
 
     public Employee getAssignedEmployee() {return assignedEmployee;}
 
+    public void setAssignedEmployee(Employee emp) {
+        assignedEmployee = emp;
+    }
+
     @Override
-    protected String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         StringBuilder encryptedPassword = new StringBuilder(password); //use string builder to build one char at a time
         char newChar;
 
@@ -43,7 +47,7 @@ public class Customer extends User {
             newChar += 10;
             encryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Encrypted password for Customer: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
+        //log.info("Encrypted password for Customer: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
         return encryptedPassword.toString();
     }
 
@@ -58,7 +62,7 @@ public class Customer extends User {
             newChar -= 10;
             decryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Actual password for Customer: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
+        //log.info("Actual password for Customer: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
         return decryptedPassword.toString();
     }
 
@@ -68,19 +72,6 @@ public class Customer extends User {
         //for the customer
         NewAccountRequest req = new NewAccountRequest(this, accountType);
         assignedEmployee.addAccountRequest(req);
-    }
-
-    public void displayInfo() {
-        System.out.println("User's name is " + this.firstName + ", " + this.lastName + ".");
-        System.out.println("They currently have " + activeAccounts.size() + "accounts at the bank.");
-
-        this.totalMoney = 0; //this variable just keeps track of value of accounts, the money isn't actually being deleted
-        for (Account acc:activeAccounts) {
-            System.out.println("    A " + acc.accountType);
-            this.totalMoney += acc.getAccountValue();
-        }
-
-        System.out.println("The total value of the accounts is " + this.totalMoney);
     }
 
     public void addAccount(Account acc) {

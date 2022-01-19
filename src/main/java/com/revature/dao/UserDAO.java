@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class UserDAO {
 
@@ -13,20 +14,32 @@ public class UserDAO {
     private static Logger log = LoggerFactory.getLogger(UserDAO.class); //Do all classes get their own logger?
 
     public UserDAO () {
-        //Normally this is where would be adding or retreiving things from an actual data base, however, we haven't
+        //Normally this is where would be adding or retrieving things from an actual database, however, we haven't
         //learned SQL yet so for now just use strings
 
         users = new ArrayList<User>();
 
         //first add an admin
-        users.add(new Admin("Admin", "Robert", "Floyd", "rfloyd01", "Apples2oranges!"));
+        Admin Bobby = new Admin("Admin", "Robert", "Floyd", "rfloyd01", "Apples2oranges!");
+        users.add(Bobby);
 
         //then add an employees
-        users.add(new Employee("Employee", "Scott", "Olsen", "Sno19", "Guitar_Man12"));
+        Employee Scott = new Employee("Employee", "Scott", "Olsen", "Sno19", "Guitar_Man12");
+        Employee Billy = new Employee("Employee", "Billy", "Floyd", "Baggins24", "yeetMyFeet19!");
 
         //finally add some customers
-        users.add(new Customer("Customer", "Jonathan", "Miller", "JJMM07", "123Ab!!powl"));
-        users.add(new Customer("Customer", "Daniel", "Preuss", "DanThaMan", "CodingIsKewl420$"));
+        Customer Jonathan = new Customer("Customer", "Jonathan", "Miller", "JJMM07", "123Ab!!powl");
+        Customer Dan = new Customer("Customer", "Daniel", "Preuss", "DanThaMan", "CodingIsKewl420$");
+        Jonathan.setAssignedEmployee(Scott);
+        Dan.setAssignedEmployee(Billy);
+        users.add(Jonathan);
+        users.add(Dan);
+
+        //assign customers to employees with an Admin then add them to database
+        Bobby.assignCustomer(Scott, Jonathan);
+        Bobby.assignCustomer(Billy, Dan);
+        users.add(Scott);
+        users.add(Billy);
     }
 
     public static String getUserTypeDAO(String currentUser) {
@@ -34,10 +47,15 @@ public class UserDAO {
         //exists. If so, return the userType of that user (i.e. Customer, Employee, Admin). If the
         //username isn't in the database return a blank string
 
-        //TODO: Function to query database will go here
-        //  for now just return a blank string.
+        //Scan the database to and return the information associated with the username
+        for (User u:users) {
+            if (u.username.equals(currentUser)) {
+                return u.userType;
+            }
+        }
 
-        return "";
+        //if no username match was found then return null
+        return null;
     }
 
     public static User getBasicUserInformationDAO(String userName) {
@@ -82,10 +100,30 @@ public class UserDAO {
 
     public boolean validUsernameDAO(String username) {
         //this function scans the user database to see if the passed username already exists or not
-        log.info("username passed to the DAO layer is: " + username);
+        //log.info("username passed to the DAO layer is: " + username);
         for (User u:users) {
             if (u.username.equals(username)) return false;
         }
         return true; //didn't find the username in the database so the passed username is free to be used.
+    }
+
+    public void updateUser(UserRequest newInformation, String existingUsername) {
+        //iterate through the users until we find the one who needs to have their info updated. Searching by the
+        //username in the UserRequest won't work because it's possible the name isn't in the database yet. For this
+        //reason we also need to pass the existing username, so we can actually find the entry
+        log.info("updateUserDAO() function called.");
+        Iterator<User> iter = users.iterator();
+
+        while (iter.hasNext()) {
+            User u = iter.next();
+            if (u.username.equals(existingUsername)) {
+                //update the first name, last name, username and password for the user
+                u.username = newInformation.username;
+                u.firstName = newInformation.firstName;
+                u.lastName = newInformation.lastName;
+                u.password = newInformation.password;
+            }
+        }
+
     }
 }

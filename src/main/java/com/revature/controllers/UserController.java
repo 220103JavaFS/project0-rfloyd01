@@ -1,6 +1,5 @@
 package com.revature.controllers;
 
-import com.revature.dao.UserDAO;
 import com.revature.models.users.Customer;
 import com.revature.models.users.User;
 import com.revature.models.users.UserRequest;
@@ -8,11 +7,6 @@ import com.revature.models.util.JSONResponse;
 import com.revature.services.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserController extends Controller {
 
@@ -20,32 +14,48 @@ public class UserController extends Controller {
     //only Employees and Admins do. Employees view will be restricted so that they can only see their own clients
     //while Admins will be able to see everybody in the database.
 
+    //FIELDS
     private UserService userService = UserService.getUserService();
 
-    private Handler getUser = (ctx) -> {
+    //METHODS
+    //User Viewing Methods
+    private Handler getUsers = (ctx) -> {
         //First we need to make sure that someone is logged in, if not, restrict access to this endpoint
         if (ctx.req.getSession(false) != null) {
+            //This function will do different things depending on what type of user is logged in. A Customer will only
+            //be able to see information about themselves here. Employees will see information about themselves and all
+            //of their customers. Admins will see all of the employees in the database, and by extension, all of their
+            //Customers. They can also see any other admins. This means Admins will be able to see every user in the database.
+            //Test to see if current user information is saved
+
+            //Obtain the User information stored in the cookie and cast it to the appropriate user type
+            User currentUser = ctx.sessionAttribute("User");
+
             //the info on the current user is stored in the session cookie, just print it out
-            ctx.json(ctx.req.getAttribute("User"));
+            ctx.json(ctx.sessionAttribute("User"));
             ctx.status(200); //set status to 200 ok
         }
         else ctx.status(401); //set status to 401 unauthorized
     };
-
     private Handler getSpecificUser = (ctx) -> {
         //First we need to make sure that someone is logged in, if not, restrict access to this endpoint
         if (ctx.req.getSession(false) != null) {
 
             //only employees and admins can access this page, if a customer is logged in then restrict access
-            User existingUser = (User)ctx.req.getAttribute("User");
+            User existingUser = (User)ctx.sessionAttribute("User");
+
+            //TODO: These nested IF statements are sore on the eyes, rethink some of the logic here and try to utilize a
+            //  switch statement somehow.
+
             if (existingUser.userType == "Customer") {
                 ctx.status(401); //set status to 401 not authorized
             }
             else {
                 String userName = ctx.pathParam("user_name");
-                User desiredUser = userService.getBasicUserInformation(userName); //
+                User desiredUser = userService.getBasicUserInformation(userName);
 
                 if (desiredUser != null) {
+                    //log.info("Username exists, found User: " + desiredUser.toString());
                     if (existingUser.userType.equals("Admin")) {
                         //admins can view anyone else info so just display the user
                         ctx.json(desiredUser);
@@ -53,13 +63,20 @@ public class UserController extends Controller {
                     else {
                         //the current user logged in is an employee, they can only view their own customers
                         if (desiredUser.userType == "Customer") {
+                            //log.info("An employee is currently attempting to look at a Customer in the database.");
                             Customer castUser = (Customer)desiredUser;
+
                             if (castUser.getAssignedEmployee().username.equals(existingUser.username)) {
                                 //employee has access
                                 ctx.json(castUser);
                                 ctx.status(200);
                             }
                             else ctx.status(401); //access restricted
+                        }
+                        else if (desiredUser.username.equals(existingUser.username)) {
+                            //it's redundant but employees are allowed to look up themselves using this endpoint
+                            ctx.json(existingUser);
+                            ctx.status(200);
                         }
                         else ctx.status(401); //not authorized to view this user
                     }
@@ -68,13 +85,12 @@ public class UserController extends Controller {
                     //the username in the path doesn't exist in the database, set status to 404 not found
                     ctx.status(404);
                 }
-                ctx.json(ctx.req.getAttribute("User"));
-                ctx.status(200); //set status to 200 ok
             }
         }
         else ctx.status(401); //set status to 401 unauthorized
     };
 
+    //User Creation Methods
     private Handler createUser = (ctx) -> {
 
         //TODO: should the below user be created by a user factory? I think so since we won't know the kind of user until runtime
@@ -122,57 +138,64 @@ public class UserController extends Controller {
         ctx.json(res);
     };
 
-    private Handler createUserMessage = (ctx) -> {
-        //You will only be allowed to create a new user if you aren't currently logged in, as creating a user will
-        //automatically log the new user into the app
-        String currentUser = ctx.header("postmanUsername");
-        StringBuilder resultString = new StringBuilder();
-        //log.info("Current user from postman is:" + currentUser);
+    //User Modifying Methods
+    private Handler editUser = (ctx) -> {
+        //Allows a User to edit the basic information about themselves. Specifically they can edit their first name, last name, username
+        //and password. Other things like adding accounts or reassigning customers for employees will happen elsewhere.
 
-        if (currentUser == ""){
-            resultString.append("Welcome to the User Creation Page!\n" +
-                    "To create a new user please pass a command with the following syntax to {POST - localhost/8080/users/create}:\n" +
-                    "{\n" +
-                    "    \"userType\"  : \"{your_userType_here}\",\n" +
-                    "    \"firstName\" : \"{your_firstName_here}\",\n" +
-                    "    \"lastName\"  : \"{your_lastName_here}\",\n" +
-                    "    \"username\"  : \"{your_username_here}\",\n" +
-                    "    \"password\"  : \"{your_password_here}\"\n" +
-                    "}\n\n" +
-                    "Please note that all words must be encased in double quotation marks. Your actual information will \n" +
-                    "replace the brackets and what's inside of them. There are a few rules for successful account creation.\n" +
-                    "1. The user type must be either Customer, Employee or Admin. The first letter must be capitalized.\n" +
-                    "2. Your username must be unique. If an existing user already has that username you will be prompted to change it.\n" +
-                    "3. The password must be at least 10 characters long, contain both an uppercase and lowercase letter, contain " +
-                    "a number, and contain a unique character such as !, @ or &\n\n" +
-                    "Here's an example of a successful entry:\n" +
-                    "{\n" +
-                    "    \"userType\"  : \"Customer\",\n" +
-                    "    \"firstName\" : \"Robert\",\n" +
-                    "    \"lastName\"  : \"Floyd\",\n" +
-                    "    \"username\"  : \"rfloyd01\",\n" +
-                    "    \"password\"  : \"Coding_is_kewl34\"\n" +
-                    "}");
-            ctx.status(200);
+        if (ctx.req.getSession(false) != null) {
+            User currentUser = ctx.sessionAttribute("User");
+            UserRequest modifiedUser = ctx.bodyAsClass(UserRequest.class);
+
+            if (userService.updateUser(modifiedUser, currentUser.username)) ctx.status(202); //the changes were successful
+            else ctx.status(400); //something was wrong with the credentials entered
         }
         else {
-            resultString.append("You must logout before creating a new user. To do so please visit " +
-                    "{GET - localhost:8080/logout} for more information.");
-            ctx.status(200);
+            ctx.status(401); //must be logged in to edit your own information
         }
-        ctx.result(resultString.toString()); //print out the body to Postman
+    };
+    private Handler editSpecificUser = (ctx) -> {
+        //Similar to the editUser handler, however, this variant is for Admin use and allows them to edit the basic user
+        //information for any user in the system. Technically this Handler can be accessed by both Customers and Employees,
+        //however, it will only work if they try and edit their own information (which is redundant because they can do the
+        //same with the editUser handler)
+
+        if (ctx.req.getSession(false) != null) {
+            User currentUser = ctx.sessionAttribute("User");
+
+            UserRequest modifiedUser = ctx.bodyAsClass(UserRequest.class);
+            String pathUsername = ctx.pathParam("user_name");
+
+            if (!currentUser.userType.equals("Admin")) {
+                //Employees and Customers can only change their own information, we need to check and see
+                //that if the current user is a non-Admin type
+                if (!currentUser.username.equals(pathUsername)) {
+                    log.info("Current user is: " + currentUser.username + ", Trying to update user: " + pathUsername);
+                    ctx.status(401); //these users can only update their own information
+                    return; //TODO: Can handlers have returns? Test this
+                }
+            }
+
+            if (userService.updateUser(modifiedUser, pathUsername)) ctx.status(202); //the changes were successful
+            else ctx.status(400); //something was wrong with the credentials entered
+
+        }
+        else {
+            ctx.status(401); //must be logged in to view this
+        }
     };
 
     @Override
     public void addRoutes(Javalin app) {
         //User viewing
-        app.get("/users", getUser); //returns info for the user currently logged in
+        app.get("/users", getUsers); //returns info for the user currently logged in
         app.get("/users/{user_name}", getSpecificUser); //returns info for the user specified by "user_name" variable
 
         //User creation
-        app.post("/users", createUser);
+        app.post("/users", createUser); //TODO: Still need to make this Handler
 
         //User editing
-        //app.put("/users", editUser);
+        app.put("/users", editUser);
+        app.put("/users/{user_name}", editSpecificUser);
     }
 }

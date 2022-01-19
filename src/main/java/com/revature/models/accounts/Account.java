@@ -1,5 +1,7 @@
 package com.revature.models.accounts;
 
+import java.util.Objects;
+
 public abstract class Account {
 
     //I was thinking of putting a "User" field here, however, it doesn't make sense to me
@@ -23,5 +25,26 @@ public abstract class Account {
 
     public void addFunds(double funds) {
         accountValue += funds;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Double.compare(account.accountValue, accountValue) == 0 && Objects.equals(accountType, account.accountType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountType, accountValue);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountType='" + accountType + '\'' +
+                ", accountValue=" + accountValue +
+                '}';
     }
 }

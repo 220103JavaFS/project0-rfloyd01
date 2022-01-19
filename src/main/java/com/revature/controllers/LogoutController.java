@@ -1,13 +1,7 @@
 package com.revature.controllers;
 
-import com.revature.models.users.User;
-import com.revature.models.util.JSONResponse;
-import com.revature.models.util.LoginAttempt;
-import com.revature.services.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class LogoutController extends Controller {
 
@@ -16,10 +10,13 @@ public class LogoutController extends Controller {
         //we can only access the logout page if we're actually logged in
         if (ctx.req.getSession(false) != null) {
             //log the current user out
+            //TODO: Do I need to set the "User" attribute of the cookie to null here by using ctx.consumeSessionAttribute()
+            //  or will it automatically go away when the cookie is invalidated?
+
             ctx.req.getSession().invalidate();
             ctx.status(202); //return 202 Accepted code
         }
-        else ctx.status(401); //no one is logged in so we can't access the logout page
+        else ctx.status(401); //no one is logged in, restrict access the logout page
     };
 
     @Override

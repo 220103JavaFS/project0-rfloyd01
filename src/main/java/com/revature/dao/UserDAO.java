@@ -15,7 +15,6 @@ import java.util.Iterator;
 
 public class UserDAO {
 
-    //private static ArrayList<User> users;
     private static Logger log = LoggerFactory.getLogger(UserDAO.class); //Do all classes get their own logger?
 
     public UserDAO () { super();}
@@ -389,7 +388,7 @@ public class UserDAO {
         //iterate through the users until we find the one who needs to have their info updated. Searching by the
         //username in the UserRequest won't work because it's possible the name isn't in the database yet. For this
         //reason we also need to pass the existing username, so we can actually find the entry
-//        log.info("updateUserDAO() function called.");
+
         try (Connection conn = ConnectionUtil.getConnection()) {
             //first get the existing info on the User
             User u = getBasicUserInformationDAO(existingUsername);

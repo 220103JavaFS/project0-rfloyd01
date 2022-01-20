@@ -16,11 +16,6 @@ public class Customer extends User {
         this.assignedEmployee = assignedEmployee;
     }
 
-    //Customer specific information
-    public int activeAccountRequests =  0; //a user won't start with an open account requests
-    public double totalMoney = 0; //The total amount of money across all accounts
-    public double netWorth; //Customer's worth, including things not at bank. Used when creating new accounts
-
     //Constructors
     public Customer() {
         //the default constructor
@@ -51,11 +46,6 @@ public class Customer extends User {
         return encryptedPassword.toString();
     }
 
-//    @Override
-//    public String getUnencryptedPassword() {
-//        //used for debugging originally
-//        return getPassword();
-//    }
 
     @Override
     protected String getPassword() {
@@ -72,6 +62,7 @@ public class Customer extends User {
         return decryptedPassword.toString();
     }
 
+
     public ArrayList<Account> getActiveAccounts() {
         return activeAccounts;
     }
@@ -81,28 +72,7 @@ public class Customer extends User {
     }
 
     //Public Functions
-    public void applyForAccount(String accountType) {
-        //adds a request for a new account to the back of the queue of the employee that's responsible
-        //for the customer
-        NewAccountRequest req = new NewAccountRequest(this, accountType);
-    }
 
-    public void addAccount(Account acc) {
-        activeAccounts.add(acc);
-    }
-
-    public void addMoneyToAccount(int accountIndex, double amount) {
-
-        //first, make sure that the desired account actually exists
-        if (accountIndex < 0 || accountIndex >= activeAccounts.size()) {
-            System.out.println("Account doesn't exist, please select a valid account.");
-            return;
-        }
-
-        //second, check that the amount to be added is allowable (i.e. can't be <= 0)
-        if (amount > 0) activeAccounts.get(accountIndex).addFunds(amount);
-        else System.out.println("Invalid amount, funds not added to account.");
-    }
 
     @Override
     public String toString() {

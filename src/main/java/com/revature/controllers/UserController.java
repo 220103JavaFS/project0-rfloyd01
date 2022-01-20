@@ -4,7 +4,6 @@ import com.revature.models.users.Customer;
 import com.revature.models.users.Employee;
 import com.revature.models.users.User;
 import com.revature.models.users.UserRequest;
-import com.revature.models.util.JSONResponse;
 import com.revature.services.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;

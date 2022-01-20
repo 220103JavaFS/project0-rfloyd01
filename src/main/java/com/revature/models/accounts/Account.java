@@ -15,10 +15,10 @@ public abstract class Account {
     //all types of the same account should have the same interest rate, but accounts of different types will have
     //different interest rates.
     public int accountNumber;
-    public static double interestRate;
+    //public static double interestRate;
     public String accountType;
     public double accountValue;
-    public Customer accountOwner;
+    public String accountOwner;
 
     public Account() {
         super();

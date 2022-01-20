@@ -97,6 +97,17 @@ public class HomepageController extends Controller {
                 "    \"lastName\" : \"Davis\",\n" +
                 "    \"username\" : \"MDavis59\",\n" +
                 "    \"password\" : \"iG0tsTheBlu$\"\n" +
+                "}\n\n" +
+                "Account Creation Example:\n" +
+                "{\n" +
+                "    \"requestNumber\" : \"1\",\n" +
+                "    \"customerName\" : \"JStarita\",\n" +
+                "    \"accountType\" : \"Checking\"\n" +
+                "}\n\n" +
+                "Account Creation Exercise Example:\n" +
+                "{\n" +
+                "    \"requestNumber\" : \"1\",\n" +
+                "    \"decision\" : \"Yes\"\n" +
                 "}\n\n";
 
         ctx.status(200);

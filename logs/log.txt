@@ -1,0 +1,27 @@
+09:12:53.045 [] [main] INFO  io.javalin.Javalin - 
+       __                      __ _            __ __
+      / /____ _ _   __ ____ _ / /(_)____      / // /
+ __  / // __ `/| | / // __ `// // // __ \    / // /_
+/ /_/ // /_/ / | |/ // /_/ // // // / / /   /__  __/
+\____/ \__,_/  |___/ \__,_//_//_//_/ /_/      /_/
+
+          https://javalin.io/documentation
+
+09:12:53.054 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @313ms to org.eclipse.jetty.util.log.Slf4jLog
+09:12:53.054 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+09:12:53.069 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 102 days old. Consider upgrading!).
+09:12:53.069 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+09:12:53.329 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+09:12:53.329 [] [main] INFO  io.javalin.Javalin - Javalin started in 275ms \o/
+09:13:11.986 [] [qtp1543974463-23] INFO  com.revature.dao.UserDAO - Currently inside the UserDAO db string.
+09:13:11.992 [] [qtp1543974463-23] INFO  com.revature.controllers.Controller - Login by: User{userType='Customer', firstName='jonathan', lastName='miller', username='JJMM07', activeAccounts=[]}
+09:13:20.095 [] [qtp1543974463-34] INFO  com.revature.controllers.Controller - editAccount called
+09:13:20.095 [] [qtp1543974463-34] INFO  com.revature.services.AccountService - editAccountService() called:
+09:13:20.701 [] [qtp1543974463-34] INFO  com.revature.dao.AccountDAO - In the right place
+09:13:26.325 [] [qtp1543974463-33] INFO  com.revature.controllers.Controller - editAccount called
+09:13:38.486 [] [qtp1543974463-34] INFO  com.revature.dao.AccountDAO - Succesfully queried database for accounts
+09:13:44.483 [] [qtp1543974463-33] INFO  com.revature.controllers.Controller - editAccount called
+09:13:50.467 [] [qtp1543974463-34] INFO  com.revature.controllers.Controller - editAccount called
+09:13:50.467 [] [qtp1543974463-34] INFO  com.revature.services.AccountService - editAccountService() called:
+09:13:51.093 [] [qtp1543974463-34] INFO  com.revature.dao.AccountDAO - In the right place
+09:13:54.370 [] [qtp1543974463-33] INFO  com.revature.dao.AccountDAO - Succesfully queried database for accounts

@@ -54,7 +54,6 @@ public class AccountService {
         log.info("create accountRequestService called");
         return accountDAO.createNewAccountRequestDAO(nar);
     }
-
     public boolean exerciseAccountRequestService(ExerciseAccountRequest ear) {
         //look at the request, if the exercise string is Yes, then remove the request from the database and create a new account, then assign it to the user
         //if the exercise string is no, remove the request from the database, but don't create a new account
@@ -74,6 +73,7 @@ public class AccountService {
         }
     }
 
+    //EDIT FUNCTIONS
     public boolean editAccountService(AccountEdit ae, Account a) {
         //need to check a few things
         //first, the only acceptable commands are "Withdraw" and "Deposit", so if we don't get one of these
@@ -82,6 +82,7 @@ public class AccountService {
         //deposit anything that will bring the account over the column limit in the database (wich is only a
         //7 figure number). If all of these checks pass, then we can proceed to the DAO
 
+        log.info("editAccountService() called:");
         double newAmount = 0;
         if (ae.amount < 0) {
             log.info("Can't add or withdraw a negative amount");
@@ -109,6 +110,6 @@ public class AccountService {
         }
 
         //if we haven't returned false yet then we're ok to make the change
-        return accountDAO.editAccount(newAmount, a);
+        return accountDAO.editAccountDAO(newAmount, a);
     }
 }

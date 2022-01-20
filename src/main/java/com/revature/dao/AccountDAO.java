@@ -72,7 +72,7 @@ public class AccountDAO {
 
             PreparedStatement statement = conn.prepareStatement(sql);
             statement.setInt(1, accountNumber);
-            ResultSet result = statement.executeQuery(sql);
+            ResultSet result = statement.executeQuery();
 
             while(result.next()) {
                 Account account;
@@ -286,16 +286,19 @@ public class AccountDAO {
     }
 
     //EDIT FUNCTIONS
-    public boolean editAccount(double newAmount, Account a) {
+    public boolean editAccountDAO(double newAmount, Account a) {
         try (Connection conn = ConnectionUtil.getConnection()) {
             //first get the existing info on the User
             String sql = "UPDATE accounts SET account_amount = ? WHERE account_number = ?;";
             PreparedStatement statement = conn.prepareStatement(sql);
 
+            log.info("In the right place");
             int currentLocation = 0;
             statement.setDouble(++currentLocation, newAmount);
             statement.setInt(++currentLocation, a.accountNumber);
             statement.execute();
+
+            //log.info("This command went to SQL from AccountDAO: " + statement.toString());
 
             return true; //updated without issue
         } catch (SQLException e) {

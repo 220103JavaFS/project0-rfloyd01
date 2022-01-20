@@ -409,8 +409,8 @@ public class UserDAO {
                 encryptedPassword = cust.encryptPassword(newInformation.password);
             }
 
-            log.info("Original Password passed to user update was: " + newInformation.password);
-            log.info("Encrypted Password is : " + encryptedPassword);
+            //log.info("Original Password passed to user update was: " + newInformation.password);
+            //log.info("Encrypted Password is : " + encryptedPassword);
             sql += "SET first_name = ?, last_name = ?, username = ?, encrypted_password = ? WHERE username = ?;";
 
             PreparedStatement statement = conn.prepareStatement(sql);

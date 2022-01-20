@@ -4,6 +4,7 @@ import com.revature.models.accounts.Account;
 import com.revature.models.accounts.AccountEdit;
 import com.revature.models.accounts.ExerciseAccountRequest;
 import com.revature.models.accounts.NewAccountRequest;
+import com.revature.models.users.Customer;
 import com.revature.models.users.Employee;
 import com.revature.models.users.User;
 import com.revature.services.AccountService;
@@ -40,6 +41,73 @@ public class AccountController extends Controller {
             }
             ctx.json(accounts);
             ctx.status(200);
+        }
+        else {
+            ctx.status(401);
+        }
+    };
+
+    private Handler getSpecificAccount = (ctx) -> {
+        //Get's info on the specific account, but only if the user has access to it
+
+        //first check to see if anyone is logged in
+        if (ctx.req.getSession(false) != null){
+            User currentUser = ctx.sessionAttribute("User");
+            ArrayList<Account> accounts = accountService.getAllAccountsService();
+            Integer accountNumber = Integer.parseInt(ctx.pathParam("account_number")); //get account_number as an integer
+            boolean found = false;
+            if (currentUser.userType.equals("Admin")) {
+                //admins have access to all accounts, cycle through all the accounts to see if the desired account is there
+                for (int i = 0; i < accounts.size(); i++) {
+                    if (accounts.get(i).accountNumber == accountNumber) {
+                        ctx.json(accounts.get(i));
+                        found = true;
+                        break;
+                    }
+                }
+                if (found) ctx.status(200);
+                else ctx.status(404);
+            }
+            else if (currentUser.userType.equals("Employee")) {
+                //employees can only see accounts of their customers. get customer by call to user service
+                Employee currentEmployee = userService.getEmployeeService(currentUser.username);
+                boolean allowed = false;
+                for (int i = 0; i < accounts.size(); i++) {
+                    if (accounts.get(i).accountNumber == accountNumber) {
+                        //account is found, make sure that employee has access to it
+                        found = true;
+                        ArrayList<Customer> customers = currentEmployee.getAssignedCustomers();
+                        for (int j = 0; j < customers.size(); j++) {
+                            if (customers.get(j).username.equals(accounts.get(i).accountOwner)) {
+                                ctx.json(accounts.get(i));
+                                ctx.status(200);
+                                allowed = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!found) ctx.status(404);
+                else if (!allowed) ctx.status(401);
+            }
+            else {
+                //users can only see accounts that they own
+                log.info("Customer account get called:");
+                boolean allowed = false;
+                for (int i = 0; i < accounts.size(); i++) {
+                    if (accounts.get(i).accountNumber == accountNumber) {
+                        found = true;
+                        if (accounts.get(i).accountOwner.equals(currentUser.username)) {
+                            ctx.json(accounts.get(i));
+                            ctx.status(200);
+                            allowed = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) ctx.status(404);
+                else if (!allowed) ctx.status(401);
+            }
         }
         else {
             ctx.status(401);
@@ -113,13 +181,17 @@ public class AccountController extends Controller {
         if (ctx.req.getSession(false) != null){
             //then, we need to check that the account number entered in the account edit request actually exists
             AccountEdit ae = ctx.bodyAsClass(AccountEdit.class);
-            Account account = accountService.getAccountService(ae.accountNumber);
+            Integer accountNumber = Integer.parseInt(ctx.pathParam("account_number")); //get account_number as an integer
 
+            Account account = accountService.getAccountService(accountNumber);
+
+            log.info("editAccount called");
             if (account != null) {
                 User currentUser = ctx.sessionAttribute("User");
                 boolean worked = false; //default to false
                 if (currentUser.userType.equals("Admin")) {
                     //admins can edit any persons account
+                    log.info("about to call editAccountService()");
                     worked = accountService.editAccountService(ae, account);
                     if (worked) ctx.status(201); //edit was carried out
                     else ctx.status(400); //something was wrong with the edit request
@@ -153,6 +225,7 @@ public class AccountController extends Controller {
     public void addRoutes(Javalin app) {
         //Account Viewing
         app.get("/accounts", getAccounts);
+        app.get("/accounts/{account_number}", getSpecificAccount);
         app.get("/accounts/requests", getAccountRequests);
 
         //Account Adding

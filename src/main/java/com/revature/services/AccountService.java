@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.dao.AccountDAO;
 import com.revature.dao.UserDAO;
 import com.revature.models.accounts.Account;
+import com.revature.models.accounts.AccountEdit;
 import com.revature.models.accounts.ExerciseAccountRequest;
 import com.revature.models.accounts.NewAccountRequest;
 import com.revature.models.users.Customer;
@@ -24,6 +25,9 @@ public class AccountService {
     //GET FUNCTIONS
     public ArrayList<Account> getAllAccountsService() {
         return accountDAO.getAllAccountsDAO();
+    }
+    public Account getAccountService(int accountNumber) {
+        return accountDAO.getAccount(accountNumber);
     }
     public ArrayList<Account> getEmployeeAccountsService(String employeeUsername) {
         return accountDAO.getEmployeeAccountsDAO(employeeUsername);
@@ -68,5 +72,43 @@ public class AccountService {
         else {
             return false;
         }
+    }
+
+    public boolean editAccountService(AccountEdit ae, Account a) {
+        //need to check a few things
+        //first, the only acceptable commands are "Withdraw" and "Deposit", so if we don't get one of these
+        //then kick back a false response. Next, we can't deposit or withdraw negative amounts. Furthermore,
+        //we can't withdraw anything that will put the account into negative amounts. Finally, we can't
+        //deposit anything that will bring the account over the column limit in the database (wich is only a
+        //7 figure number). If all of these checks pass, then we can proceed to the DAO
+
+        double newAmount = 0;
+        if (ae.amount < 0) {
+            log.info("Can't add or withdraw a negative amount");
+            return false;
+        }
+
+        double limit = 10000000.00; //TODO:double check the limit
+        if (ae.action.equals("Deposit")) {
+            if ((limit - a.accountValue) < ae.amount) {
+                log.info("Account can't hold this much money, please open another account.");
+                return false;
+            }
+            newAmount = a.accountValue + ae.amount;
+        }
+        else if (ae.action.equals("Withdraw")) {
+            if (ae.amount > a.accountValue) {
+                log.info("Not enough money for withdrawal attempt.");
+                return false;
+            }
+            newAmount = a.accountValue - ae.amount;
+        }
+        else {
+            log.info("Can only add or withdraw from the account");
+            return false;
+        }
+
+        //if we haven't returned false yet then we're ok to make the change
+        return accountDAO.editAccount(newAmount, a);
     }
 }

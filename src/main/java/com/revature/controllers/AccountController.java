@@ -1,6 +1,7 @@
 package com.revature.controllers;
 
 import com.revature.models.accounts.Account;
+import com.revature.models.accounts.AccountEdit;
 import com.revature.models.accounts.ExerciseAccountRequest;
 import com.revature.models.accounts.NewAccountRequest;
 import com.revature.models.users.Employee;
@@ -107,6 +108,47 @@ public class AccountController extends Controller {
         }
     };
 
+    private Handler editAccount = (ctx) -> {
+        //first check to see if anyone is logged in
+        if (ctx.req.getSession(false) != null){
+            //then, we need to check that the account number entered in the account edit request actually exists
+            AccountEdit ae = ctx.bodyAsClass(AccountEdit.class);
+            Account account = accountService.getAccountService(ae.accountNumber);
+
+            if (account != null) {
+                User currentUser = ctx.sessionAttribute("User");
+                boolean worked = false; //default to false
+                if (currentUser.userType.equals("Admin")) {
+                    //admins can edit any persons account
+                    worked = accountService.editAccountService(ae, account);
+                    if (worked) ctx.status(201); //edit was carried out
+                    else ctx.status(400); //something was wrong with the edit request
+                }
+                else if (currentUser.userType.equals("Employee")) {
+                    //employees can only edit their customer's accounts
+                    ArrayList<Account> accounts = accountService.getEmployeeAccountsService(currentUser.username);
+                    for (int i = 0; i < accounts.size(); i++) {
+                        if (accounts.get(i).accountNumber == account.accountNumber) worked = accountService.editAccountService(ae, account);
+                    }
+                    if (worked) ctx.status(201); //edit was carried out
+                    else ctx.status(400); //something was wrong with the edit request
+                }
+                else {
+                    //customers can only edit their own accounts
+                    if (account.accountOwner.equals(currentUser.username)) worked = accountService.editAccountService(ae, account);
+                    if (worked == true) ctx.status(201); //edit was carried out
+                    else ctx.status(400); //something was wrong with the edit request
+                }
+            }
+            else {
+                ctx.status(404); //couldn't find account
+            }
+        }
+        else {
+            ctx.status(401); //nobody was logged in
+        }
+    };
+
     @Override
     public void addRoutes(Javalin app) {
         //Account Viewing
@@ -117,6 +159,6 @@ public class AccountController extends Controller {
         app.post("/accounts/requests", createAccount);
 
         //Account Editing
-        //app.put("/accounts/{account_number}", alterAccount);
+        app.put("/accounts/{account_number}", editAccount);
     }
 }

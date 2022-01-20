@@ -1,9 +1,6 @@
 package com.revature.dao;
 
-import com.revature.models.accounts.Account;
-import com.revature.models.accounts.CheckingAccount;
-import com.revature.models.accounts.NewAccountRequest;
-import com.revature.models.accounts.SavingAccount;
+import com.revature.models.accounts.*;
 import com.revature.models.users.*;
 import com.revature.models.util.ConnectionUtil;
 import com.revature.services.UserService;
@@ -60,6 +57,41 @@ public class AccountDAO {
 
             //if no username match was found then return null
             return accounts;
+
+        } catch (SQLException e) {
+            log.info(e.toString());
+            return null;
+        }
+    }
+    public Account getAccount(int accountNumber) {
+        //returns the info for a single account, if it exists
+        try (Connection conn = ConnectionUtil.getConnection()) {
+            //Since each employee has a list of customers associated with them, we don't need to actually query the
+            //customer table in our original call to the database.
+            String sql = "SELECT * FROM accounts WHERE account_number = ?;";
+
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, accountNumber);
+            ResultSet result = statement.executeQuery(sql);
+
+            while(result.next()) {
+                Account account;
+                if (result.getString("account_type").equals("Checking")) {
+                    account = new CheckingAccount();
+                    account.accountType = "Checking";
+                }
+                else {
+                    account = new SavingAccount();
+                    account.accountType = "Saving";
+                }
+                account.accountNumber = accountNumber;
+                account.accountValue = result.getDouble("account_amount");
+                account.accountOwner = result.getString("account_owner");
+                return account;
+            }
+
+            //if no accounts match the account number, return null
+            return null;
 
         } catch (SQLException e) {
             log.info(e.toString());
@@ -250,6 +282,25 @@ public class AccountDAO {
             statement.execute();
         } catch (SQLException e) {
             log.info(e.toString());
+        }
+    }
+
+    //EDIT FUNCTIONS
+    public boolean editAccount(double newAmount, Account a) {
+        try (Connection conn = ConnectionUtil.getConnection()) {
+            //first get the existing info on the User
+            String sql = "UPDATE accounts SET account_amount = ? WHERE account_number = ?;";
+            PreparedStatement statement = conn.prepareStatement(sql);
+
+            int currentLocation = 0;
+            statement.setDouble(++currentLocation, newAmount);
+            statement.setInt(++currentLocation, a.accountNumber);
+            statement.execute();
+
+            return true; //updated without issue
+        } catch (SQLException e) {
+            log.info(e.toString());
+            return false;
         }
     }
 }

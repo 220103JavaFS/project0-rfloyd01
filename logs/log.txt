@@ -19,3 +19,20 @@
 09:22:01.778 [] [qtp1543974463-33] INFO  com.revature.dao.UserDAO - Currently inside the UserDAO db string.
 09:22:01.779 [] [qtp1543974463-33] INFO  com.revature.controllers.Controller - Login by: User{userType='Admin', firstName='robert', lastName='floyd', username='rfloyd01', password='Ambgle]gq]icuj12'}
 09:22:06.258 [] [qtp1543974463-34] INFO  com.revature.dao.AccountDAO - Succesfully queried database for accounts
+09:44:57.471 [] [main] INFO  io.javalin.Javalin - 
+       __                      __ _            __ __
+      / /____ _ _   __ ____ _ / /(_)____      / // /
+ __  / // __ `/| | / // __ `// // // __ \    / // /_
+/ /_/ // /_/ / | |/ // /_/ // // // / / /   /__  __/
+\____/ \__,_/  |___/ \__,_//_//_//_/ /_/      /_/
+
+          https://javalin.io/documentation
+
+09:44:57.479 [] [main] INFO  org.eclipse.jetty.util.log - Logging initialized @321ms to org.eclipse.jetty.util.log.Slf4jLog
+09:44:57.480 [] [main] INFO  io.javalin.Javalin - Starting Javalin ...
+09:44:57.494 [] [main] INFO  io.javalin.Javalin - You are running Javalin 4.1.1 (released October 10, 2021. Your Javalin version is 102 days old. Consider upgrading!).
+09:44:57.494 [] [main] INFO  io.javalin.Javalin - No port specified, starting on port 8080. Call start(port) to change ports.
+09:44:57.746 [] [main] INFO  io.javalin.Javalin - Listening on http://localhost:8080/
+09:44:57.746 [] [main] INFO  io.javalin.Javalin - Javalin started in 266ms \o/
+09:45:11.501 [] [qtp1205555397-37] INFO  com.revature.dao.UserDAO - Currently inside the UserDAO db string.
+09:45:11.507 [] [qtp1205555397-37] INFO  com.revature.controllers.Controller - Login by: User{userType='Admin', firstName='robert', lastName='floyd', username='rfloyd01', password='Ambgle]gq]icuj12'}

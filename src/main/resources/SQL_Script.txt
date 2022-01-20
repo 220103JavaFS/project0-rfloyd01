@@ -1,0 +1,103 @@
+--CREATE DATABASE Project0;
+
+--First drop any existing tables
+DROP TABLE IF EXISTS accounts;
+DROP TABLE IF EXISTS customers CASCADE; --the customer TABLE has a lot OF other TABLES depending ON it so CASCADE the drop
+DROP TABLE IF EXISTS employees;
+DROP TABLE IF EXISTS admins;
+DROP TABLE IF EXISTS account_requests;
+
+--Create necessary tables using DDL
+
+--create the Admin table first as it doesn't need to refer to anything
+CREATE TABLE admins (
+	first_name VARCHAR(20),
+	last_name VARCHAR(20),
+	username VARCHAR(20) PRIMARY KEY,
+	encrypted_password VARCHAR(20),
+	user_type VARCHAR(20));
+
+--The employee table is basically the same thing as the admin table
+CREATE TABLE employees (
+	first_name VARCHAR(20),
+	last_name VARCHAR(20),
+	username VARCHAR(20) PRIMARY KEY,
+	encrypted_password VARCHAR(20),
+	user_type VARCHAR(20));
+
+
+--The customer table is similar to the first two, however, has a column that references the employee table.
+--This is because each customer has a single employee that they're assigned to
+CREATE TABLE customers (
+	first_name VARCHAR(20),
+	last_name VARCHAR(20),
+	username VARCHAR(20) PRIMARY KEY,
+	encrypted_password VARCHAR(20),
+	assigned_employee VARCHAR(20) REFERENCES employees(username) ON UPDATE CASCADE,
+	user_type VARCHAR(20));
+
+--Since the admins, employees and customers tables are virtually the same it will be easy to JOIN
+--or UNION with them
+
+--Create a table for all active accounts. Each account is tied to a customer
+CREATE TABLE accounts (
+	account_number SERIAL PRIMARY KEY,
+	account_type VARCHAR(20),
+	account_amount NUMERIC(9, 2),
+	account_owner VARCHAR(20) REFERENCES customers(username) ON UPDATE CASCADE);
+
+
+--We need one final table to keep track of any open account requests. This table will reference the customer who submit the request
+CREATE TABLE account_requests (
+	account_request_num SERIAL PRIMARY KEY,
+	account_type VARCHAR(20),
+	account_requester VARCHAR(20) REFERENCES customers(username) ON UPDATE CASCADE);
+
+--All of our tables have been created so now we can focus on our DML
+--The database only stores encrypted passwords, all passwords put in here by default were encrypted in JAVA first
+
+--NOTE: The encrypted passwords below need to be in ASCII format to be input properly into the database, not sure how to get UTF-8 encoding in AWS currently
+
+--First we need an ADMIN (admin passwords are encrypted by subtracting 2 from each character)
+--For reference, the actual password for this admin is Coding_is_kewl34
+INSERT INTO admins (first_name, last_name, username, encrypted_password, user_type)
+	VALUES ('robert', 'floyd', 'rfloyd01', 'Ambgle]gq]icuj12', 'Admin');
+
+--Now we'll add two employees (employee passwords are encrypted by subtracting 8 from each character)
+/*
+ * for future reference the passwords for these employees is as follows:
+ * scott = Guitar_man12
+ * daniel = 12345_ABcde
+ */
+INSERT INTO employees (first_name, last_name, username, encrypted_password, user_type)
+	VALUES ('scott', 'olsen', 'Sno19', '?malYjWeYf)*', 'Employee'),
+	('daniel', 'preuss', 'DanThaMan', ')*+,-W9:[\]', 'Employee');
+
+--Now let's add a few customers into the mix here, assigning them their employees in the process
+--(customer passwords are encrypted by removing 5 from each character)
+/*
+ * Just for future reference and testing, the unencrypted passwords are as follows:
+ * jonathan = EggsInMyDr@nk89
+ * billy = Baller4Life};
+ * jake = M0xLotus@2
+ * dolly = Nashville_m8
+ */
+INSERT INTO customers (first_name, last_name, username, encrypted_password, assigned_employee, user_type)
+	VALUES ('jonathan', 'miller', 'JJMM07', '@bbnDiHt?m;if34', 'Sno19', 'Customer'),
+	('billy', 'floyd', 'Bilbo24', '=\gg`m/Gda`x6', 'Sno19', 'Customer'),
+	('jake', 'astarita', 'JStarita', 'H+sGjopn;-', 'DanThaMan', 'Customer'),
+	('dolly', 'parton', 'MusicLady', 'I\ncqdgg`Zh3', 'DanThaMan', 'Customer');
+
+--Now that we have some customers created, let's assign at least one account to each of them
+INSERT INTO accounts (account_type, account_amount, account_owner)
+	VALUES ('Checking', 1234.56, 'JJMM07'),
+	('Checking', 234567.56, 'Bilbo24'),
+	('Checking', 123408.00, 'JStarita'),
+	('Checking', 10982.31, 'MusicLady');
+
+--ANd for good measure, let's create an account creation request for each user
+INSERT INTO account_requests (account_type, account_requester)
+	VALUES ('Saving', 'JJMM07'),
+	('Saving', 'Bilbo24'),
+	('Saving', 'JStarita'),
+	('Saving', 'MusicLady');

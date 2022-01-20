@@ -20,17 +20,17 @@ public class LoginController extends Controller {
                 "Admin Example:\n" +
                 "{\n" +
                 "    \"username\" : \"rfloyd01\",\n" +
-                "    \"password\" : \"Apples2oranges!\"\n" +
+                "    \"password\" : \"Coding_is_kewl34\"\n" +
                 "}\n\n" +
                 "Employee Example:\n" +
                 "{\n" +
                 "    \"username\" : \"Sno19\",\n" +
-                "    \"password\" : \"Guitar_Man12\"\n" +
+                "    \"password\" : \"Guitar_man12\"\n" +
                 "}\n\n" +
                 "Customer Example:\n" +
                 "{\n" +
                 "    \"username\" : \"JJMM07\",\n" +
-                "    \"password\" : \"123Ab!!powl\"\n" +
+                "    \"password\" : \"EggsInMyDr@nk89\"\n" +
                 "}\n\n";;
         ctx.status(200);
         ctx.result(messageBody); //always send result to Postman
@@ -81,6 +81,7 @@ public class LoginController extends Controller {
                 }
                 else {
                     //the username exists, however, the password was incorrect. Return 400 Bad Request code
+                    //log.info("Password was incorrect. Tried to log in with " + loggy.password + " but the actual password is " + loginUser.getUnencryptedPassword());
                     ctx.status(400);
                 }
             }

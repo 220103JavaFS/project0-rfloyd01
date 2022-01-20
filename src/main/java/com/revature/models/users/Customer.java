@@ -5,11 +5,16 @@ import com.revature.models.accounts.Account;
 import java.util.ArrayList;
 
 public class Customer extends User {
-
-    //TODO - currently each customer has a reference variable pointing to their employee, but each employee also has
-    //TODO - reference variables pointing to their customers. Is it good form to have two objects pointing at eachother?
-    //private Employee assignedEmployee; //every user will have an employee at the bank responsible for their accounts, this will be assigned or reassigned by an admin
+    private String assignedEmployee; //the username of the employee assigned to this customer, assigned upon customer creation
     private ArrayList<Account> activeAccounts; //a list of active accounts for the user
+
+    public String getAssignedEmployee() {
+        return assignedEmployee;
+    }
+
+    public void setAssignedEmployee(String assignedEmployee) {
+        this.assignedEmployee = assignedEmployee;
+    }
 
     //Customer specific information
     public int activeAccountRequests =  0; //a user won't start with an open account requests
@@ -20,6 +25,7 @@ public class Customer extends User {
     public Customer() {
         //the default constructor
         super();
+        activeAccounts = new ArrayList<>();
     }
 
     public Customer(String userType, String firstName, String lastName, String username, String password) {
@@ -35,15 +41,21 @@ public class Customer extends User {
         char newChar;
 
         for (int i = 0; i < encryptedPassword.length(); i++) {
-            //add a value of 10 to each character in the password string to encrypt it. This high tech method of
+            //removes a value of 5 from each character in the password string to encrypt it. This high tech method of
             //encryption is said to be "un-hackable"
             newChar = encryptedPassword.charAt(i);
-            newChar += 10;
+            newChar -= 5;
             encryptedPassword.setCharAt(i, newChar);
         }
         //log.info("Encrypted password for Customer: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
         return encryptedPassword.toString();
     }
+
+//    @Override
+//    public String getUnencryptedPassword() {
+//        //used for debugging originally
+//        return getPassword();
+//    }
 
     @Override
     protected String getPassword() {
@@ -51,13 +63,21 @@ public class Customer extends User {
         char newChar;
 
         for (int i = 0; i < decryptedPassword.length(); i++) {
-            //remove 10 from each character in the password to decrypt it
+            //add 5 to each character in the password to decrypt it
             newChar = decryptedPassword.charAt(i);
-            newChar -= 10;
+            newChar += 5;
             decryptedPassword.setCharAt(i, newChar);
         }
         //log.info("Actual password for Customer: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
         return decryptedPassword.toString();
+    }
+
+    public ArrayList<Account> getActiveAccounts() {
+        return activeAccounts;
+    }
+
+    public void setActiveAccounts(ArrayList<Account> activeAccounts) {
+        this.activeAccounts = activeAccounts;
     }
 
     //Public Functions

@@ -4,7 +4,6 @@ import com.revature.models.Avenger;
 
 public interface AvengerDAO {
 
-    public Avenger findHero(int id);
-    public boolean addHero(Avenger avenger);
-    //public boolean
+    Avenger findHero(int id);
+    boolean addHero(Avenger avenger);
 }

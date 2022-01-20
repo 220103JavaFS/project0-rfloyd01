@@ -18,15 +18,21 @@ public class Admin extends User {
         char newChar;
 
         for (int i = 0; i < encryptedPassword.length(); i++) {
-            //add a value of 16 to each character in the password string to encrypt it. This high tech method of
+            //subtracts a value of 2 from each character in the password string to encrypt it. This high tech method of
             //encryption is said to be "un-hackable"
             newChar = encryptedPassword.charAt(i);
-            newChar += 16;
+            newChar -= 2;
             encryptedPassword.setCharAt(i, newChar);
         }
         //log.info("Encrypted password for Admin: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
         return encryptedPassword.toString();
     }
+
+//    @Override
+//    public String getUnencryptedPassword() {
+//        //used for debugging originally
+//        return getPassword();
+//    }
 
     @Override
     protected String getPassword() {
@@ -34,9 +40,9 @@ public class Admin extends User {
         char newChar;
 
         for (int i = 0; i < decryptedPassword.length(); i++) {
-            //remove 16 from each character in the password to decrypt it
+            //add 2 to each character in the password to decrypt it
             newChar = decryptedPassword.charAt(i);
-            newChar -= 16;
+            newChar += 2;
             decryptedPassword.setCharAt(i, newChar);
         }
         //log.info("Actual password for Admin: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());

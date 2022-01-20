@@ -1,5 +1,7 @@
 package com.revature.models.accounts;
 
+import com.revature.models.users.Customer;
+
 import java.util.Objects;
 
 public abstract class Account {
@@ -12,9 +14,11 @@ public abstract class Account {
 
     //all types of the same account should have the same interest rate, but accounts of different types will have
     //different interest rates.
+    public int accountNumber;
     public static double interestRate;
     public String accountType;
-    private double accountValue;
+    public double accountValue;
+    public Customer accountOwner;
 
     public Account() {
         super();
@@ -32,19 +36,21 @@ public abstract class Account {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Double.compare(account.accountValue, accountValue) == 0 && Objects.equals(accountType, account.accountType);
+        return accountNumber == account.accountNumber && Double.compare(account.accountValue, accountValue) == 0 && Objects.equals(accountType, account.accountType) && Objects.equals(accountOwner, account.accountOwner);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountType, accountValue);
+        return Objects.hash(accountNumber, accountType, accountValue, accountOwner);
     }
 
     @Override
     public String toString() {
         return "Account{" +
-                "accountType='" + accountType + '\'' +
+                "accountNumber=" + accountNumber +
+                ", accountType='" + accountType + '\'' +
                 ", accountValue=" + accountValue +
+                ", accountOwner=" + accountOwner +
                 '}';
     }
 }

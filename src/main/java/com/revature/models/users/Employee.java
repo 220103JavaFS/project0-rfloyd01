@@ -50,15 +50,21 @@ public class Employee extends User {
         char newChar;
 
         for (int i = 0; i < encryptedPassword.length(); i++) {
-            //add a value of 25 to each character in the password string to encrypt it. This high tech method of
+            //remove a value of 8 from each character in the password string to encrypt it. This high tech method of
             //encryption is said to be "un-hackable"
             newChar = encryptedPassword.charAt(i);
-            newChar += 25;
+            newChar -= 8;
             encryptedPassword.setCharAt(i, newChar);
         }
         //log.info("Encrypted password for Employee: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
         return encryptedPassword.toString();
     }
+
+//    @Override
+//    public String getUnencryptedPassword() {
+//        //used this for debuggin originally
+//        return getPassword();
+//    }
 
     @Override
     protected String getPassword() {
@@ -66,9 +72,9 @@ public class Employee extends User {
         char newChar;
 
         for (int i = 0; i < decryptedPassword.length(); i++) {
-            //remove 25 from each character in the password to decrypt it
+            //add 8 from each character in the password to decrypt it
             newChar = decryptedPassword.charAt(i);
-            newChar -= 25;
+            newChar += 8;
             decryptedPassword.setCharAt(i, newChar);
         }
         //log.info("Actual password for Employee: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());

@@ -22,11 +22,12 @@ public abstract class User {
         //the default constructor
         super();
     }
-    public User (String userType, String firstName, String lastName, String username) {
+    public User (String userType, String firstName, String lastName, String username, String password) {
         this.userType = userType;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
+        this.password = encryptPassword(password); //need to encrypt passwords before saving them
         inbox = new ArrayList<>(); //create the user's message inbox
     }
 
@@ -45,7 +46,8 @@ public abstract class User {
         password = p;
     }
 
-    protected abstract String encryptPassword(String password); //encrypts password on creation before storing in database for security reasons, different types of users will have different types of encryption
+    public abstract String encryptPassword(String password); //encrypts password on creation before storing in database for security reasons, different types of users will have different types of encryption
+    //public abstract String getUnencryptedPassword();
     protected abstract String getPassword(); //decrypts the password and returns the string
     public boolean comparePassword(String passwordAttempt) {
         //decrypts an encrypted password to see if it matches the password given to function
@@ -53,4 +55,14 @@ public abstract class User {
         return false; //no match, invalid login attempt
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "userType='" + userType + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password+ '\'' +
+                '}';
+    }
 }

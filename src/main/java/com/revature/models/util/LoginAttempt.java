@@ -8,11 +8,13 @@ public class LoginAttempt {
     //this login attempt will be passed on down to the DAO layer which will check that the username exists
     //and that the password is correct
 
+    //public String userType;
     public String username;
     public String password; //this will get encrypted so ok to leave public
 
     public LoginAttempt() {super();}
-    public LoginAttempt(String u, String p) {
+    public LoginAttempt(String ut, String u, String p) {
+        //this.userType = ut;
         this.username = u;
         this.password = p;
     }

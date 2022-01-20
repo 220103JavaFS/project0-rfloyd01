@@ -1,18 +1,14 @@
 package com.revature.controllers;
 
-import com.revature.dao.UserDAO;
 import com.revature.models.users.Customer;
+import com.revature.models.users.Employee;
 import com.revature.models.users.User;
 import com.revature.models.users.UserRequest;
-import com.revature.models.util.JSONResponse;
 import com.revature.services.UserService;
 import io.javalin.Javalin;
 import io.javalin.http.Handler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserController extends Controller {
 
@@ -20,156 +16,209 @@ public class UserController extends Controller {
     //only Employees and Admins do. Employees view will be restricted so that they can only see their own clients
     //while Admins will be able to see everybody in the database.
 
+    //FIELDS
     private UserService userService = UserService.getUserService();
-    private static Logger log = LoggerFactory.getLogger(UserController.class); //Do all classes get their own logger?
 
-    private Handler getUsersMessage = (ctx) -> {
-        String resultString = "Welcome to the User View Page!\n" +
-                "To login using Postman please pass a command with the following syntax to 'POST - localhost\\8080\\login':\n" +
-                "{\n" +
-                "    \"username\" : \"{your_username_here}\",\n" +
-                "    \"password\" : \"{your_password_here}\"\n" +
-                "}\n\n" +
-                "Please note that all words must be encased in double quotation marks. Your actual username and password\n" +
-                "will replace the brackets and what's inside of them.";
-        ctx.result(resultString);
-        ctx.status(200);
-    };
-
+    //METHODS
+    //User Viewing Methods
     private Handler getUsers = (ctx) -> {
+        //First we need to make sure that someone is logged in, if not, restrict access to this endpoint
+        if (ctx.req.getSession(false) != null) {
+            //Obtain the User information stored in the cookie and cast it to the appropriate user type
+            User currentUser = ctx.sessionAttribute("User");
+            log.info("UserController getUsers() handler was called");
 
-        //First we need to take a look at the Authorization header of the incoming HTTP request to see if the user has
-        //access to this page, and if so, what users can they actually see?
-        String currentUser = ctx.header("postmanUsername");
-
-        //Need to drill down to the service layer and then further down to the DAO layer to figure out the user type
-        String userType = userService.getUserTypeService(currentUser);
-        ArrayList<User> userList;
-        switch (userType) {
-            case "Employee":
-                //userList = userService.getCustomers(currentUser);
-                break;
-            case "Admin":
-                userList = userService.getAllUsers();
-                break;
-            default:
-                ctx.result("You don't have access to this page.");
-                ctx.status(401);
-                return; //TODO: can you tell a handler function to return? it has no return type
-
-        }
-
-        //ctx.json(userList);
-        ctx.status(200);
-
-    };
-
-    //TODO: create a getAllEmployees Handler
-
-    //TODO: create a getAllCustomers Handler
-
-    private Handler createUser = (ctx) -> {
-
-        //TODO: should the below user be created by a user factory? I think so since we won't know the kind of user until runtime
-        //TODO: to accomplish this the ctx.body() shouldn't contain a user, but some other class, maybe a
-        UserRequest u = ctx.bodyAsClass(UserRequest.class);
-        JSONResponse res = new JSONResponse(); //create a JSON response class to get info to postman
-
-        int errorId = userService.newUser(u);
-        if (errorId == 0) {
-            res.messageBody = "Successfully created new user. You've been automatically logged in." +
-                    "Please visit {GET - localhost:8080} to see what you can do with your new" +
-                    "account!";
-            res.newValue = u.username;
-
-            //If the new user is a customer, they need to be assigned to an employee who wil handle
-            //their accounts. This will require a call down to the DAO layer.
-            //if (u.userType.equals("Customer")) userService.assignEmployee();
-
-            ctx.status(201); //the user was successfully created added to the database
-        }
-        else {
-            //something went wrong, print the error message associated with the error code
-            if (errorId == 0b10000000)
-            {
-                res.messageBody = "The user was succesfully created, however, an unknown error" +
-                        "occured when trying to add them to the database. Please try again later";
-                ctx.status(500); //server or database error
+            if (currentUser.userType.equals("Admin")) {
+                //when admins call this function, by default they see everyone in the database
+                ArrayList<User> users = userService.getAllUsersService();
+                ctx.json(users);
+                ctx.status(200);
+            }
+            else if (currentUser.userType.equals("Employee")) {
+                //Employees can see themselves and all of their customers
+                Employee emp = userService.getEmployeeService(currentUser.username);
+                ctx.json(emp);
+                ctx.status(200);
             }
             else {
-                //there can be multiple error bits so we need to check for each one in an if statement, not an else if
-
-                StringBuilder errorMessage = new StringBuilder("Couldn't create new user:\n");
-                if ((errorId & 0b1000000) > 0) {errorMessage.append("Password didn't include a special character, please update password.\n");}
-                if ((errorId & 0b100000) > 0) {errorMessage.append("Password didn't include a number, please update password.\n");}
-                if ((errorId & 0b10000) > 0) {errorMessage.append("Password didn't include a lowercase letter, please update password.\n");}
-                if ((errorId & 0b1000) > 0) {errorMessage.append("Password didn't include an uppercase letter, please update password.\n");}
-                if ((errorId & 0b100) > 0) {errorMessage.append("Password wasn't at least 10 characters, please lengthen password.\n");}
-                if ((errorId & 0b10) > 0) {errorMessage.append("Username is already taken, please use a different username.\n");}
-                if ((errorId & 0b1) > 0) {errorMessage.append("Not a valid user type, please select a valid user type.\n");}
-
-                res.messageBody = errorMessage.toString(); //add error message in the response
-                ctx.status(400); //request error
+                Customer cust = userService.getCustomerService(currentUser.username);
+                ctx.json(cust);
+                ctx.status(200);
             }
         }
-        ctx.json(res);
+        else ctx.status(401); //set status to 401 unauthorized
+    };
+    private Handler getSpecificUser = (ctx) -> {
+        //First we need to make sure that someone is logged in, if not, restrict access to this endpoint
+        if (ctx.req.getSession(false) != null) {
+
+            //only employees and admins can access this page, if a customer is logged in then restrict access
+            User existingUser = (User)ctx.sessionAttribute("User");
+
+            //TODO: These nested IF statements are sore on the eyes, rethink some of the logic here and try to utilize a
+            //  switch statement somehow.
+
+            if (existingUser.userType.equals("Customer")) {
+                ctx.status(401); //set status to 401 not authorized
+            }
+            else {
+                String userName = ctx.pathParam("user_name");
+                log.info("Passed username is: " + userName);
+
+                User desiredUser = userService.getBasicUserInformation(userName);
+                if (desiredUser == null) ctx.status(404);
+                else {
+                    String userType = desiredUser.userType; //different usertypes will be displayed differently
+
+                    //log.info("Username exists, found User: " + desiredUser.toString());
+                    if (existingUser.userType.equals("Admin")) {
+                        //admins can view anyone else info so just display the user
+                        switch(userType) {
+                            case "Employee":
+                                Employee emp = userService.getEmployeeService(userName);
+                                ctx.json(emp);
+                                break;
+                            case "Customer":
+                                Customer cust = userService.getCustomerService(userName);
+                                ctx.json(cust);
+                                break;
+                            default:
+                                ctx.json(desiredUser); //admins only have basic info so no need to get more specific
+                                break;
+                        }
+                        ctx.status(200);
+                    }
+                    else {
+                        //the current user logged in is an employee, they can only view themselves of their own customers
+                        if (desiredUser.userType.equals("Customer")) {
+                            Customer cust = userService.getCustomerService(userName);
+
+                            //log.info("Current user is: " + existingUser.username + ", necessary user is: " + cust.getAssignedEmployee());
+
+                            //TODO:The below is going to acquire a look into the DB to see who the assigned employee is. Uncomment below at some point
+                            if (cust.getAssignedEmployee().equals(existingUser.username)) {
+                                //employee has access
+                                ctx.json(cust);
+                                ctx.status(200);
+                            }
+                            else ctx.status(401); //access restricted
+                        }
+                        else if (desiredUser.username.equals(existingUser.username)) {
+                            //it's redundant but employees are allowed to look up themselves using this endpoint
+                            ctx.json(existingUser);
+                            ctx.status(200);
+                        }
+                        else ctx.status(401); //not authorized to view this user
+                    }
+                }
+            }
+        }
+        else ctx.status(401); //set status to 401 unauthorized
     };
 
-    private Handler createUserMessage = (ctx) -> {
-        //You will only be allowed to create a new user if you aren't currently logged in, as creating a user will
-        //automatically log the new user into the app
-        String currentUser = ctx.header("postmanUsername");
-        StringBuilder resultString = new StringBuilder();
-        //log.info("Current user from postman is:" + currentUser);
+    //User Creation Methods
+    private Handler createUser = (ctx) -> {
+        //we can only create a new user if we aren't currently logged in
 
-        if (currentUser == ""){
-            resultString.append("Welcome to the User Creation Page!\n" +
-                    "To create a new user please pass a command with the following syntax to {POST - localhost/8080/users/create}:\n" +
-                    "{\n" +
-                    "    \"userType\"  : \"{your_userType_here}\",\n" +
-                    "    \"firstName\" : \"{your_firstName_here}\",\n" +
-                    "    \"lastName\"  : \"{your_lastName_here}\",\n" +
-                    "    \"username\"  : \"{your_username_here}\",\n" +
-                    "    \"password\"  : \"{your_password_here}\"\n" +
-                    "}\n\n" +
-                    "Please note that all words must be encased in double quotation marks. Your actual information will \n" +
-                    "replace the brackets and what's inside of them. There are a few rules for successful account creation.\n" +
-                    "1. The user type must be either Customer, Employee or Admin. The first letter must be capitalized.\n" +
-                    "2. Your username must be unique. If an existing user already has that username you will be prompted to change it.\n" +
-                    "3. The password must be at least 10 characters long, contain both an uppercase and lowercase letter, contain " +
-                    "a number, and contain a unique character such as !, @ or &\n\n" +
-                    "Here's an example of a successful entry:\n" +
-                    "{\n" +
-                    "    \"userType\"  : \"Customer\",\n" +
-                    "    \"firstName\" : \"Robert\",\n" +
-                    "    \"lastName\"  : \"Floyd\",\n" +
-                    "    \"username\"  : \"rfloyd01\",\n" +
-                    "    \"password\"  : \"Coding_is_kewl34\"\n" +
-                    "}");
-            ctx.status(200);
+        if (ctx.req.getSession(false) != null) {
+            ctx.status(401);
         }
         else {
-            resultString.append("You must logout before creating a new user. To do so please visit " +
-                    "{GET - localhost:8080/logout} for more information.");
-            ctx.status(200);
+            UserRequest u = ctx.bodyAsClass(UserRequest.class);
+
+            int errorId = userService.createNewUserService(u); //use error codes for debugging purposes
+            if (errorId == 0) {
+                ctx.status(201); //the user was successfully created added to the database
+            }
+            else {
+                //something went wrong, print all error messages to the info log
+                if (errorId == 0b10000000)
+                {
+                    log.info("The user was succesfully created, however, an unknown error" +
+                            "occured when trying to add them to the database. Please try again later");
+                    ctx.status(500); //server or database error
+                }
+                else {
+                    //there can be multiple error bits so we need to check for each one in an if statement, not an else if
+
+                    StringBuilder errorMessage = new StringBuilder("Couldn't create new user:\n");
+                    if ((errorId & 0b1000000) > 0) {errorMessage.append("Password either didn't include a special character, or had an out of range special character,\nAll characters entered must have an ASCII value between 48 and 126 please update password.\n");}
+                    if ((errorId & 0b100000) > 0) {errorMessage.append("Password didn't include a number, please update password.\n");}
+                    if ((errorId & 0b10000) > 0) {errorMessage.append("Password didn't include a lowercase letter, please update password.\n");}
+                    if ((errorId & 0b1000) > 0) {errorMessage.append("Password didn't include an uppercase letter, please update password.\n");}
+                    if ((errorId & 0b100) > 0) {errorMessage.append("Password wasn't at least 10 characters, please lengthen password.\n");}
+                    if ((errorId & 0b10) > 0) {errorMessage.append("Username is already taken, please use a different username.\n");}
+                    if ((errorId & 0b1) > 0) {errorMessage.append("Not a valid user type, please select a valid user type.\n");}
+
+                    log.info(errorMessage.toString()); //add error message in the response
+                    ctx.status(400); //request error
+                }
+            }
         }
-        ctx.result(resultString.toString()); //print out the body to Postman
+    };
+
+    //User Modifying Methods
+    private Handler editUser = (ctx) -> {
+        //Allows a User to edit the basic information about themselves. Specifically they can edit their first name, last name, username
+        //and password. Other things like adding accounts or reassigning customers for employees will happen elsewhere.
+
+        if (ctx.req.getSession(false) != null) {
+            User currentUser = ctx.sessionAttribute("User");
+            UserRequest modifiedUser = ctx.bodyAsClass(UserRequest.class);
+
+            if (userService.updateUser(modifiedUser, currentUser.username)) {
+                //if the user updates their own info, this should be reflected in the current cookie
+                ctx.sessionAttribute("User", userService.getBasicUserInformation(modifiedUser.username));
+                ctx.status(202); //the changes were successful
+            }
+            else ctx.status(400); //something was wrong with the credentials entered
+        }
+        else {
+            ctx.status(401); //must be logged in to edit your own information
+        }
+    };
+    private Handler editSpecificUser = (ctx) -> {
+        //Similar to the editUser handler, however, this variant is for Admin use and allows them to edit the basic user
+        //information for any user in the system. Technically this Handler can be accessed by both Customers and Employees,
+        //however, it will only work if they try and edit their own information (which is redundant because they can do the
+        //same with the editUser handler)
+
+        if (ctx.req.getSession(false) != null) {
+            User currentUser = ctx.sessionAttribute("User");
+
+            UserRequest modifiedUser = ctx.bodyAsClass(UserRequest.class);
+            String pathUsername = ctx.pathParam("user_name");
+
+            if (!currentUser.userType.equals("Admin")) {
+                //Employees and Customers can only change their own information, we need to check and see
+                //that if the current user is a non-Admin type
+                if (!currentUser.username.equals(pathUsername)) {
+                    log.info("Current user is: " + currentUser.username + ", Trying to update user: " + pathUsername);
+                    ctx.status(401); //these users can only update their own information
+                    return; //TODO: Can handlers have returns? Test this
+                }
+            }
+
+            if (userService.updateUser(modifiedUser, pathUsername)) ctx.status(202); //the changes were successful
+            else ctx.status(400); //something was wrong with the credentials entered
+
+        }
+        else {
+            ctx.status(401); //must be logged in to view this
+        }
     };
 
     @Override
     public void addRoutes(Javalin app) {
         //User viewing
-        app.get("/users", getUsersMessage);
-        app.post("/users", getUsers);
+        app.get("/users", getUsers); //returns info for the user currently logged in
+        app.get("/users/{user_name}", getSpecificUser); //returns info for the user specified by "user_name" variable
 
         //User creation
-        app.get("/users/create", createUserMessage);
-        app.post("/users/create", createUser);
+        app.post("/users", createUser);
 
-        //TODO: Should logging in and out be it's own controller? I'm still a little confused about what exactly should
-        //  get a controller. In my mind, each model class (or group of model classes) would have a separate controller
-        //  that's capable of handling many different functions. Or maybe it's more like anything that would have a
-        //  separate endpoint (i.e. /users and /login) would need different controllers? Should ask Tim for clarification.
-
+        //User editing
+        app.put("/users", editUser);
+        app.put("/users/{user_name}", editSpecificUser);
     }
 }

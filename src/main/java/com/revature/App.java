@@ -15,7 +15,7 @@ public class App {
     public static void main(String[] args) {
         app = Javalin.create();
 
-        configure(new UserController(), new LoginController(), new LogoutController(), new HomepageController(), new HomeController(), new AvengerController(), new TestController());
+        configure(new UserController(), new LoginController(), new LogoutController(), new HomepageController());
 
 //        try {
 //            getConnection();

@@ -51,7 +51,7 @@ public class AccountService {
 
     //CREATE FUNCTIONS
     public boolean createNewAccountRequestService(NewAccountRequest nar) {
-        log.info("create accountRequestService called");
+        //log.info("create accountRequestService called");
         return accountDAO.createNewAccountRequestDAO(nar);
     }
     public boolean exerciseAccountRequestService(ExerciseAccountRequest ear) {
@@ -82,7 +82,7 @@ public class AccountService {
         //deposit anything that will bring the account over the column limit in the database (wich is only a
         //7 figure number). If all of these checks pass, then we can proceed to the DAO
 
-        log.info("editAccountService() called:");
+        //log.info("editAccountService() called:");
         double newAmount = 0;
         if (ae.amount < 0) {
             log.info("Can't add or withdraw a negative amount");

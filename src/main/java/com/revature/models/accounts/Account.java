@@ -15,20 +15,12 @@ public abstract class Account {
     //all types of the same account should have the same interest rate, but accounts of different types will have
     //different interest rates.
     public int accountNumber;
-    //public static double interestRate;
     public String accountType;
     public double accountValue;
     public String accountOwner;
 
     public Account() {
         super();
-    }
-    public double getAccountValue () {
-        return accountValue;
-    }
-
-    public void addFunds(double funds) {
-        accountValue += funds;
     }
 
     @Override

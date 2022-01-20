@@ -28,11 +28,6 @@ public class Admin extends User {
         return encryptedPassword.toString();
     }
 
-//    @Override
-//    public String getUnencryptedPassword() {
-//        //used for debugging originally
-//        return getPassword();
-//    }
 
     @Override
     protected String getPassword() {
@@ -45,7 +40,6 @@ public class Admin extends User {
             newChar += 2;
             decryptedPassword.setCharAt(i, newChar);
         }
-        //log.info("Actual password for Admin: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
         return decryptedPassword.toString();
     }
 

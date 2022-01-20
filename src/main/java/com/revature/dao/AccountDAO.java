@@ -33,7 +33,7 @@ public class AccountDAO {
             //create array list to return user objects
             ArrayList <Account> accounts = new ArrayList<>();
 
-            log.info("Succesfully queried database for accounts");
+            //log.info("Succesfully queried database for accounts");
 
             while(result.next()) {
                 //log.info("Currently inside the UserDAO db string."); //if this doesn't print out, something was wrong with the command passed to SQL
@@ -113,7 +113,7 @@ public class AccountDAO {
         }
 
         for (int i = 0; i < customers.size(); i++) {
-            log.info("Current customer name is: " + customers.get(i).username);
+            //log.info("Current customer name is: " + customers.get(i).username);
             accounts.addAll(getCustomerAccountsDAO(customers.get(i).username)); //add all accounts from the employee at current index
         }
 
@@ -135,7 +135,7 @@ public class AccountDAO {
             //create array list to return user objects
             ArrayList <Account> accounts = new ArrayList<>();
 
-            log.info("Succesfully queried database for accounts");
+            //log.info("Succesfully queried database for accounts");
 
             while(result.next()) {
                 //log.info("Currently inside the UserDAO db string."); //if this doesn't print out, something was wrong with the command passed to SQL
@@ -226,7 +226,7 @@ public class AccountDAO {
     //ADD FUNCTIONS
     public boolean createNewAccountRequestDAO(NewAccountRequest nar) {
         //add the new account request to the appropriate table in the database
-        log.info("create accountRequestDAO called");
+        //log.info("create accountRequestDAO called");
         try (Connection conn = ConnectionUtil.getConnection()) {
             //adding a user will be handled differently depending on of it's a Customer of an Admin/Employee
             String sql;
@@ -292,7 +292,7 @@ public class AccountDAO {
             String sql = "UPDATE accounts SET account_amount = ? WHERE account_number = ?;";
             PreparedStatement statement = conn.prepareStatement(sql);
 
-            log.info("In the right place");
+            //log.info("In the right place");
             int currentLocation = 0;
             statement.setDouble(++currentLocation, newAmount);
             statement.setInt(++currentLocation, a.accountNumber);

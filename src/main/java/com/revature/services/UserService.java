@@ -95,7 +95,7 @@ public class UserService {
 
 
     public ArrayList<User> getAllUsersService() {
-        log.info("UserService getAllUsersService() method was called");
+        //log.info("UserService getAllUsersService() method was called");
         return userDAO.getAllUsersDAO();
     }
 
@@ -125,7 +125,7 @@ public class UserService {
     }
 
     public boolean updateUser(UserRequest newInformation, String existingUsername) {
-        log.info("updateUserService() function called.");
+        //log.info("updateUserService() function called.");
         //Check to see if a new username was entered, if so, see if this new username is available
         if (!newInformation.username.equals(existingUsername)) {
             //since the username is going to be updated we need to check the database to see if the desired username is available

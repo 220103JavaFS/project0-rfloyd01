@@ -66,7 +66,7 @@ public class UserDAO {
             }
 
             //if no username match was found then return null
-            log.info("No users with that username found, returning null value");
+            //log.info("No users with that username found, returning null value");
             return null;
 
         } catch (SQLException e) {
@@ -77,7 +77,7 @@ public class UserDAO {
     public ArrayList<User> getAllUsersDAO() {
         //used by admins to view all users in the database
         try (Connection conn = ConnectionUtil.getConnection()) {
-            log.info("UserDAO getAllUsersDAO() method was called");
+            //log.info("UserDAO getAllUsersDAO() method was called");
             //Since each employee has a list of customers associated with them, we don't need to actually query the
             //customer table in our original call to the database.
             String sql = "SELECT first_name, last_name, username, encrypted_password, user_type FROM admins UNION " +
@@ -129,7 +129,7 @@ public class UserDAO {
         //create another query while currently connected to the database. Returns all of the accounts owned
         //by the Customer passed to the function
         try {
-            log.info("UserDAO getCustomerAccounts() method was called");
+            //log.info("UserDAO getCustomerAccounts() method was called");
             ArrayList<Account> accounts = new ArrayList<>(); //first create the list to return
 
             String sql = "SELECT account_number, account_type, account_amount FROM accounts WHERE account_owner = ?;"; //statement protection needed
@@ -198,7 +198,7 @@ public class UserDAO {
         //utilizes an existing connection to create another query. Employees have a list of customers that we need
         //to access that differentiates them from a standard user
         try {
-            log.info("UserDAO getEmployeeCustomers() method was called");
+            //log.info("UserDAO getEmployeeCustomers() method was called");
             String sql = "SELECT first_name, last_name, username, encrypted_password, user_type FROM customers WHERE assigned_employee = ?;";
             PreparedStatement statement = conn.prepareStatement(sql);
             ArrayList<Customer> customers = new ArrayList<>();
@@ -228,7 +228,7 @@ public class UserDAO {
     public ArrayList<Employee> getAllEmployeesDAO() {
         //used by admins to view all users in the database
         try (Connection conn = ConnectionUtil.getConnection()) {
-            log.info("UserDAO getAllUsersDAO() method was called");
+            //log.info("UserDAO getAllUsersDAO() method was called");
             //Since each employee has a list of customers associated with them, we don't need to actually query the
             //customer table in our original call to the database.
             String sql = "SELECT * FROM employees;";
@@ -319,9 +319,9 @@ public class UserDAO {
                             "VALUES (?, ?, ?, ?, ?, ?);";
 
                     Customer cust = (Customer) newUser; //cast the user created in the factory to a customer
-                    log.info("Original Password passed to Customer create in the DAOLayer is: " + u.password);
+                    //log.info("Original Password passed to Customer create in the DAOLayer is: " + u.password);
                     String encryptedPassword = cust.encryptPassword(u.password); //make sure to encrypt password before storing
-                    log.info("Ecrypted Customer password is:" + encryptedPassword);
+                    //log.info("Ecrypted Customer password is:" + encryptedPassword);
 
                     statement = conn.prepareStatement(sql);
                     statement.setString(++locationCounter, cust.firstName);
@@ -334,7 +334,7 @@ public class UserDAO {
                     //log.info("Tried to create Customer in UserDAO with the following parameters: " + cust.toString());
                 }
                 else {
-                    log.info("Original Password passed to Admin/Employee create in the DAOLayer is: " + u.password);
+                    //log.info("Original Password passed to Admin/Employee create in the DAOLayer is: " + u.password);
                     if (u.userType.equals("Employee")) sql = "INSERT INTO employees ";
                     else sql = "INSERT INTO admins ";
                     sql += "(first_name, last_name, username, user_type, encrypted_password) VALUES " +
@@ -353,7 +353,7 @@ public class UserDAO {
                     if (u.userType.equals("Employee")) {
                         Employee emp = (Employee) newUser;
                         String encryptedPassword = emp.encryptPassword(u.password);
-                        log.info("Ecrypted Employee password is:" + encryptedPassword);
+                        //log.info("Ecrypted Employee password is:" + encryptedPassword);
 //                        log.info("Originally passed password was : " + emp.password);
 //                        emp.password = emp.encryptPassword(emp.password);
 //                        log.info("The encrypted password is: " + emp.password );
@@ -363,12 +363,12 @@ public class UserDAO {
                     else {
                         Admin adm = (Admin) newUser;
                         String encryptedPassword = adm.encryptPassword(u.password);
-                        log.info("Ecrypted Admin password is:" + encryptedPassword);
+                        //log.info("Ecrypted Admin password is:" + encryptedPassword);
                         statement.setString(++locationCounter, encryptedPassword);
                     }
                 }
 
-                log.info("Here's the statement being executed in SQL: " + statement.toString());
+                //log.info("Here's the statement being executed in SQL: " + statement.toString());
                 statement.execute();
             } catch (SQLException e) {
                 log.info(e.toString());

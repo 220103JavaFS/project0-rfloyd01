@@ -12,30 +12,7 @@ public class LoginController extends Controller {
 
     private UserService userService = UserService.getUserService();
 
-    private Handler loginDisplay = (ctx) -> {
-        //I know were not really supposed to have a front end, but, for ease of use
-        //this just shows a sample login attempt
-
-        String messageBody = "Existing users for testing purposes, only copy one set of brackets:\n\n" +
-                "Admin Example:\n" +
-                "{\n" +
-                "    \"username\" : \"rfloyd01\",\n" +
-                "    \"password\" : \"Coding_is_kewl34\"\n" +
-                "}\n\n" +
-                "Employee Example:\n" +
-                "{\n" +
-                "    \"username\" : \"Sno19\",\n" +
-                "    \"password\" : \"Guitar_man12\"\n" +
-                "}\n\n" +
-                "Customer Example:\n" +
-                "{\n" +
-                "    \"username\" : \"JJMM07\",\n" +
-                "    \"password\" : \"EggsInMyDr@nk89\"\n" +
-                "}\n\n";;
-        ctx.status(200);
-        ctx.result(messageBody); //always send result to Postman
-    };
-
+    //POST HANDLERS
     private Handler login = (ctx) -> {
         //I currently have a script in Postman that will set the Authentication header based on the username
         //retrieved from this function. I'm currently not sure if there's a way to do this without a Postman
@@ -69,9 +46,6 @@ public class LoginController extends Controller {
                     ctx.req.getSession(); //add cookie for the logged in user
 
                     //before storing user information in cookie, downcast to the appropriate type of user
-//                    if (loginUser.userType.equals("Admin")) ctx.sessionAttribute("User", (Admin)loginUser);
-//                    else if (loginUser.userType.equals("Employee")) ctx.sessionAttribute("User", (Employee)loginUser);
-//                    else ctx.sessionAttribute("User", (Employee)loginUser);
                     ctx.sessionAttribute("User", loginUser); //set the current user in the session cookie
 
                     ctx.status(202); //return 202 Accepted code
@@ -96,7 +70,6 @@ public class LoginController extends Controller {
 
     @Override
     public void addRoutes(Javalin app) {
-        app.get("/login", loginDisplay);
         app.post("/login", login);
     }
 }

@@ -12,6 +12,7 @@ public class HomepageController extends Controller {
     private UserService userService = UserService.getUserService(); //is it ok to have multiple userService objects?
     private static Logger log = LoggerFactory.getLogger(HomepageController.class); //Do all classes get their own logger?
 
+    //GET HANDLERS
     private Handler homepageGet = (ctx) -> {
         //I know were not really supposed to have a front end, but, for ease of use
         //this just shows a samples of logins and user creations for the presentation

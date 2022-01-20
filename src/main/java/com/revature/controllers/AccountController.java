@@ -21,6 +21,7 @@ public class AccountController extends Controller {
     private AccountService accountService = new AccountService();
     private UserService userService = UserService.getUserService();
 
+    //GET HANDLERS
     private Handler getAccounts = (ctx) -> {
         //If a customer envokes this function, they will be able to see all of their accounts.
         //If an employee evokes this function, they will be able to see all accounts owned by their customers
@@ -29,7 +30,7 @@ public class AccountController extends Controller {
         //first check to see if anyone is logged in
         if (ctx.req.getSession(false) != null){
             User currentUser = ctx.sessionAttribute("User");
-            ArrayList<Account> accounts = new ArrayList<>();
+            ArrayList<Account> accounts;
             if (currentUser.userType.equals("Admin")) {
                 accounts = accountService.getAllAccountsService();
             }
@@ -46,7 +47,6 @@ public class AccountController extends Controller {
             ctx.status(401);
         }
     };
-
     private Handler getSpecificAccount = (ctx) -> {
         //Get's info on the specific account, but only if the user has access to it
 
@@ -113,7 +113,6 @@ public class AccountController extends Controller {
             ctx.status(401);
         }
     };
-
     private Handler getAccountRequests = (ctx) -> {
         //only admins/employees can view activeAccountRequests
         if (ctx.req.getSession(false) != null){
@@ -138,6 +137,7 @@ public class AccountController extends Controller {
         }
     };
 
+    //CREATE HANDLERS
     private Handler createAccount = (ctx) -> {
         //If a customer evokes this function, they will be able to create a new account request.
         //If an employee evokes this function they will be able to view all account requests from their employees
@@ -149,6 +149,7 @@ public class AccountController extends Controller {
             boolean worked = false;
             if (currentUser.userType.equals("Admin")) {
                 ExerciseAccountRequest ear = ctx.bodyAsClass(ExerciseAccountRequest.class);
+                log.info("admin " + currentUser.username + "is attempting to exercise account request " + ear.requestNumber);
                 worked = accountService.exerciseAccountRequestService(ear);
                 if (worked) ctx.status(201); //request was exercised, either positively or negatively
                 else ctx.status(400);
@@ -157,6 +158,7 @@ public class AccountController extends Controller {
                 //check to see if the requestnumber in the given exerciseRequest is included in the employees request inbox.
                 //if not, return an unauthorized status
                 ExerciseAccountRequest ear = ctx.bodyAsClass(ExerciseAccountRequest.class);
+                log.info("employee " + currentUser.username + "is attempting to exercise account request " + ear.requestNumber);
                 ArrayList<NewAccountRequest> nar = accountService.getEmployeeNewAccountRequestsService(currentUser.username);
                 for (int i = 0; i < nar.size(); i++) {
                     if (nar.get(i).requestNumber == ear.requestNumber) worked = accountService.exerciseAccountRequestService(ear);
@@ -166,6 +168,7 @@ public class AccountController extends Controller {
             }
             else {
                 NewAccountRequest nar = ctx.bodyAsClass(NewAccountRequest.class);
+                log.info("user " + currentUser.username + "is attempting to open a new " + nar.accountType + " account.");
                 worked = accountService.createNewAccountRequestService(nar);
                 if (worked == true) ctx.status(201); //request created
                 else ctx.status(400);
@@ -176,6 +179,7 @@ public class AccountController extends Controller {
         }
     };
 
+    //EDIT HANDLERS
     private Handler editAccount = (ctx) -> {
         //first check to see if anyone is logged in
         if (ctx.req.getSession(false) != null){
@@ -185,13 +189,13 @@ public class AccountController extends Controller {
 
             Account account = accountService.getAccountService(accountNumber);
 
-            log.info("editAccount called");
+            //log.info("editAccount called");
             if (account != null) {
                 User currentUser = ctx.sessionAttribute("User");
                 boolean worked = false; //default to false
                 if (currentUser.userType.equals("Admin")) {
                     //admins can edit any persons account
-                    log.info("about to call editAccountService()");
+                    log.info("admin " + currentUser.username + "is attempting to edit account " + account.accountNumber);
                     worked = accountService.editAccountService(ae, account);
                     if (worked) ctx.status(201); //edit was carried out
                     else ctx.status(400); //something was wrong with the edit request
@@ -199,6 +203,7 @@ public class AccountController extends Controller {
                 else if (currentUser.userType.equals("Employee")) {
                     //employees can only edit their customer's accounts
                     ArrayList<Account> accounts = accountService.getEmployeeAccountsService(currentUser.username);
+                    log.info("employee " + currentUser.username + "is attempting to edit account " + account.accountNumber);
                     for (int i = 0; i < accounts.size(); i++) {
                         if (accounts.get(i).accountNumber == account.accountNumber) worked = accountService.editAccountService(ae, account);
                     }
@@ -207,6 +212,7 @@ public class AccountController extends Controller {
                 }
                 else {
                     //customers can only edit their own accounts
+                    log.info("customer " + currentUser.username + "is attempting to edit account " + account.accountNumber);
                     if (account.accountOwner.equals(currentUser.username)) worked = accountService.editAccountService(ae, account);
                     if (worked == true) ctx.status(201); //edit was carried out
                     else ctx.status(400); //something was wrong with the edit request

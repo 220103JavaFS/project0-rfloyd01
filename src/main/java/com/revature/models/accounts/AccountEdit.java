@@ -4,7 +4,6 @@ import java.util.Objects;
 
 public class AccountEdit {
     //this class allows for depositing and withdrawing from accounts
-    //public int accountNumber;
     public String action;
     public double amount;
 

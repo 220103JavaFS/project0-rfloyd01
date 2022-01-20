@@ -1,5 +1,9 @@
 package com.revature.models.accounts;
 
+import com.revature.models.users.Customer;
+
+import java.util.Objects;
+
 public abstract class Account {
 
     //I was thinking of putting a "User" field here, however, it doesn't make sense to me
@@ -10,18 +14,35 @@ public abstract class Account {
 
     //all types of the same account should have the same interest rate, but accounts of different types will have
     //different interest rates.
-    public static double interestRate;
+    public int accountNumber;
     public String accountType;
-    private double accountValue;
+    public double accountValue;
+    public String accountOwner;
 
     public Account() {
         super();
     }
-    public double getAccountValue () {
-        return accountValue;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return accountNumber == account.accountNumber && Double.compare(account.accountValue, accountValue) == 0 && Objects.equals(accountType, account.accountType) && Objects.equals(accountOwner, account.accountOwner);
     }
 
-    public void addFunds(double funds) {
-        accountValue += funds;
+    @Override
+    public int hashCode() {
+        return Objects.hash(accountNumber, accountType, accountValue, accountOwner);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "accountNumber=" + accountNumber +
+                ", accountType='" + accountType + '\'' +
+                ", accountValue=" + accountValue +
+                ", accountOwner=" + accountOwner +
+                '}';
     }
 }

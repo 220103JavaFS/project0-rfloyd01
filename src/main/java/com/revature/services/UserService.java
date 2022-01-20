@@ -3,6 +3,7 @@ package com.revature.services;
 import com.revature.controllers.HomepageController;
 import com.revature.dao.UserDAO;
 import com.revature.models.users.Customer;
+import com.revature.models.users.Employee;
 import com.revature.models.users.User;
 import com.revature.models.users.UserRequest;
 import org.slf4j.Logger;
@@ -18,11 +19,7 @@ public class UserService {
 
     private UserService() {super();}
 
-    public ArrayList<User> getAllUsers() {
-        return userDAO.getAllUsers();
-    }
-
-    public int newUser(UserRequest u) {
+    public int createNewUserService(UserRequest u) {
 
         //This function handles some logic when creating a new user, namely, making sure correct information was passed.
         //A binary number will be used to track all errors that occur while tyring to make a user. If there are
@@ -49,7 +46,13 @@ public class UserService {
         }
 
         //Next, we need to access the DAO layer to see if the selected username already exists or not
-        if (!userDAO.validUsernameDAO(u.username)) errorCode |= 0b10;
+        if (!userDAO.validUsernameDAO(u.username))
+        {
+            errorCode |= 0b10;
+            log.info("Username was already taken");
+        }
+        else log.info("Username is available");
+
 
         //Finally, we need to make sure that the password passed in with the 'u' parameter meets the strict password
         //requirements. These requirements are:
@@ -65,11 +68,16 @@ public class UserService {
         for (int i = 0; i < u.password.length(); i++) {
             char c = u.password.charAt(i);
 
+
+
             //use the binary and operator to remove errors from error code if necessary
             if (c >= 'A' && c <= 'Z') errorCode &= 0b1110111; //uppercase criteria met
             else if (c >= 'a' && c <= 'z') errorCode &= 0b1101111; //lowercase criteria met
             else if (c >= '0' && c <= '9') errorCode &= 0b1011111; //number criteria met
-            else errorCode &= 0b111111; //special character criteria met TODO - may want to consider limiting which characters count here
+            else errorCode &= 0b111111; //special character criteria met
+
+            //need to make sure that any special characters entered are in the appropriate range
+            if (c < 48 || c > 126) errorCode |= 0b1000000;
 
             if (errorCode == 0) {
                 //as soon as our errorCode has been reduced to 0 we are cleared to create a new user so
@@ -85,12 +93,18 @@ public class UserService {
         return errorCode;
     }
 
-    public String getUserTypeService(String currentUser) {
-        // a simple request to the DAO layer to return the userType for the given user.
-        //It checks to see that the username isn't blank before making the request of the DAO
-        //because usernames can't be blank.
-        if (currentUser == "") return "";
-        else return UserDAO.getUserTypeDAO(currentUser);
+
+    public ArrayList<User> getAllUsersService() {
+        //log.info("UserService getAllUsersService() method was called");
+        return userDAO.getAllUsersDAO();
+    }
+
+    public Employee getEmployeeService(String employeeUsername) {
+        return userDAO.getEmployeeDAO(employeeUsername);
+    }
+
+    public Customer getCustomerService(String customerUsername) {
+        return userDAO.getCustomerDAO(customerUsername);
     }
 
     public User getBasicUserInformation(String userName) {
@@ -100,7 +114,7 @@ public class UserService {
 
         //log.info("The username " + userName + " was passed to the getBasicUserInformation() function.");
 
-        if (userName == "") return (User) new Customer(); //just return a blank User, this will trigger error commands in the Control layer
+        if (userName == "") return null; //just return a null User, this will trigger error commands in the Control layer
         else return UserDAO.getBasicUserInformationDAO(userName);
     }
 
@@ -108,5 +122,61 @@ public class UserService {
         if (userService != null) return userService;
         userService = new UserService();
         return userService;
+    }
+
+    public boolean updateUser(UserRequest newInformation, String existingUsername) {
+        //log.info("updateUserService() function called.");
+        //Check to see if a new username was entered, if so, see if this new username is available
+        if (!newInformation.username.equals(existingUsername)) {
+            //since the username is going to be updated we need to check the database to see if the desired username is available
+            if (!userDAO.validUsernameDAO(newInformation.username)) return false;
+        }
+
+        //TODO: Currently this design isn't the best, users can't update their user type (i.e. a customer can't change
+        //  themselves into an employee, however, the UserRequest class comes with userType as one of it's fields.
+        //  This is because I also use the UserRequest class for creation of new users, where the userType IS needed.
+        //  When updating a user a decided to just ignore the userType field, however, different types of users have
+        //  different functions to encrypt passwords. Because of this a made the encryptPassword(userType) method for the
+        //  UserRequest class. This way encyption will stay the same when updating a user. Think about handling this in a better way
+
+        if (!passwordCheck(newInformation.password)) return false; //don't update if password isn't secure enough
+        //newInformation.encryptPassword(UserDAO.getUserTypeDAO(existingUsername)); //TODO: This is where encryption should take place, currently happening in DAO
+
+        //if username and password are all good, proceed to update information
+        userDAO.updateUser(newInformation, existingUsername);
+        return true;
+    }
+
+    public boolean passwordCheck(String password) {
+        //this function checks whether the passed password meets all the security requirements. The requirements are:
+        //1. password must be at least 10 characters in length
+        //2. password must feature at least 1 lowercase letter
+        //3. password must feature at least 1 uppercase number
+        //4. password must have at least 1 number
+        //5. password must have at least 1 special character. To make sure characters are store in database properly
+        //   we need the special character to be somewhere between (char)'0' = 48 and (char)'~' = 126 inclusive
+        if (password.length() < 10) return false;
+
+        int goodPassword = 0; //use bitwise math to keep track of password rules
+
+        //look through the password one character at a time and see if each criterion has been met.
+        //If each bit is set from a 0 to a 1 then all the criteria have been met
+        for (int i = 0; i < password.length(); i++) {
+            char c = password.charAt(i);
+
+            if (c < 48 || c > 126) return false; //we've hit a special character which isn't allowed, return false
+
+            //use the binary and operator to remove errors from error code if necessary
+            if (c >= 'A' && c <= 'Z') goodPassword |= 0b1; //uppercase criteria met
+            else if (c >= 'a' && c <= 'z') goodPassword |= 0b10; //lowercase criteria met
+            else if (c >= '0' && c <= '9') goodPassword |= 0b100; //number criteria met
+            else  goodPassword |= 0b1000; //special character criteria met.
+
+            if (goodPassword == 0b1111) {
+                //as soon as all criteria have been met we can return true
+                return true;
+            }
+        }
+        return false; //if we get here it means at least one of the password criteria weren't met so return false
     }
 }

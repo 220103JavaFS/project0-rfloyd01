@@ -10,7 +10,7 @@
     <!-- This is a file appender that will print to a file. -->
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
         <file>logs\\log.txt</file>
-        <append>false</append> <!-- Set this value to true to not overwrite existing log -->
+        <append>true</append> <!-- Set this value to true to not overwrite existing log -->
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%mdc] [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>

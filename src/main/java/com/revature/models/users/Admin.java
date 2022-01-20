@@ -9,27 +9,25 @@ public class Admin extends User {
     }
 
     public Admin (String userType, String firstName, String lastName, String username, String password) {
-        super(userType, firstName, lastName, username);
-
-        //need to encrypt the password before storing it
-        this.password = encryptPassword(password);
+        super(userType, firstName, lastName, username, password);
     }
 
     @Override
-    protected String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         StringBuilder encryptedPassword = new StringBuilder(password); //use string builder to build one char at a time
         char newChar;
 
         for (int i = 0; i < encryptedPassword.length(); i++) {
-            //add a value of 16 to each character in the password string to encrypt it. This high tech method of
+            //subtracts a value of 2 from each character in the password string to encrypt it. This high tech method of
             //encryption is said to be "un-hackable"
             newChar = encryptedPassword.charAt(i);
-            newChar += 16;
+            newChar -= 2;
             encryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Encrypted password for Admin: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
+        //log.info("Encrypted password for Admin: " + this.firstName + " " + this.lastName + " is " + encryptedPassword.toString());
         return encryptedPassword.toString();
     }
+
 
     @Override
     protected String getPassword() {
@@ -37,12 +35,16 @@ public class Admin extends User {
         char newChar;
 
         for (int i = 0; i < decryptedPassword.length(); i++) {
-            //remove 16 from each character in the password to decrypt it
+            //add 2 to each character in the password to decrypt it
             newChar = decryptedPassword.charAt(i);
-            newChar -= 16;
+            newChar += 2;
             decryptedPassword.setCharAt(i, newChar);
         }
-        log.info("Actual password for Admin: " + this.firstName + " " + this.lastName + " is " + decryptedPassword.toString());
         return decryptedPassword.toString();
+    }
+
+    public void assignCustomer(Employee emp, Customer cust) {
+        //adds the customer to the employees customer list
+        emp.addCustomer(cust);
     }
 }
